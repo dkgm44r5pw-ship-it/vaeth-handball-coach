@@ -1,0 +1,694 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101827">
+<meta name="description" content="Väth Handball Coach – Aufstellungen, Teamchemie und Live-Spielplanung für Handballtrainerinnen und Handballtrainer.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Väth Coach">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" type="image/svg+xml" href="./icon.svg">
+<link rel="apple-touch-icon" href="./icon.svg">
+<title>Väth Handball Coach</title>
+<style>
+:root{--bg:#f3f5f9;--paper:#fff;--ink:#172033;--muted:#64748b;--line:#dce2ec;--navy:#101827;--navy2:#1b2940;--lime:#c9f36a;--blue:#3578e5;--blue2:#eaf2ff;--green:#16845b;--greenbg:#e6f7ef;--amber:#a45b05;--amberbg:#fff4dc;--red:#b42318;--redbg:#fff0ee;--shadow:0 8px 26px #1720330a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input,select{font:inherit}button{cursor:pointer;border:0;border-radius:12px;padding:11px 15px;background:var(--blue);color:#fff;font-weight:750}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #91bbff;outline-offset:2px}button.secondary{background:#edf1f7;color:#25334a}button.dark{background:var(--navy);color:#fff}button.lime{background:var(--lime);color:#142016}button.danger{background:var(--redbg);color:var(--red)}button.small{padding:7px 10px;font-size:12px}button:disabled{opacity:.45;cursor:not-allowed}
+body.dark{--bg:#101722;--paper:#192333;--ink:#e8edf5;--muted:#a8b4c7;--line:#344155;--blue2:#1d3455;--greenbg:#14382c;--amberbg:#3b2e17;--redbg:#3d2325}
+body.dark input,body.dark select{background:#111b29;color:#edf2fa;border-color:#45536a}
+body.dark .player-card,body.dark .empty,body.dark .modal{background:#192333;color:#e8edf5}
+body.dark button.secondary{background:#2b3749;color:#e8edf5}
+body.dark .rating-buttons button{background:#2b3749;color:#e8edf5}
+.yearbar{max-width:1180px;margin:0 auto;padding:12px 16px 0;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.yearbar label{margin:0;white-space:nowrap}.yearbar select{max-width:180px}.yearbar .year-note{font-size:12px;color:var(--muted);margin-left:auto}
+.media-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}.media-item{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:10px;overflow:hidden}.media-item img,.media-item video{width:100%;max-height:220px;object-fit:contain;background:#0b1220;border-radius:10px}.media-item .media-meta{font-size:12px;color:var(--muted);margin:8px 0;overflow-wrap:anywhere}
+@media(max-width:650px){.yearbar .year-note{width:100%;margin-left:0}.stats{grid-template-columns:repeat(3,minmax(0,1fr))}.stat{padding:10px}.stat strong{font-size:21px}}
+header{background:radial-gradient(circle at 88% 5%,#334a62 0,transparent 30%),var(--navy);color:white;padding:20px max(16px,calc((100vw - 1180px)/2));display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:13px}.brandmark{width:54px;height:54px;border-radius:17px;background:var(--lime);display:grid;place-items:center;box-shadow:0 5px 18px #c9f36a30}.brandmark svg{width:39px;height:39px}.brand h1{margin:0;font-size:22px;letter-spacing:-.7px}.brand h1 span{color:var(--lime)}.brand p{margin:4px 0 0;color:#c3ccda;font-size:12px}.header-actions{display:flex;gap:8px;flex-wrap:wrap}.header-actions button.secondary{background:#27344a;color:white}
+main{max-width:1180px;margin:auto;padding:19px 16px 48px}.notice{background:#fff8e8;border:1px solid #f2dda9;border-radius:13px;padding:12px 14px;color:#704d00;font-size:12px;margin-bottom:16px}
+.tabs{display:flex;gap:7px;overflow:auto;padding:3px 0 15px}.tab{white-space:nowrap;background:transparent;color:var(--muted)}.tab.active{background:var(--navy);color:#fff}
+.panel{display:none}.panel.active{display:block}.head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:5px 0 16px}.head h2{font-size:24px;letter-spacing:-.5px;margin:0}.head p{margin:4px 0 0;color:var(--muted);font-size:13px}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:15px}.stat,.card{background:var(--paper);border:1px solid var(--line);border-radius:17px;padding:15px;box-shadow:var(--shadow)}.stat strong{font-size:25px;display:block}.stat span{font-size:12px;color:var(--muted)}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:13px}.toolbar input{flex:1;min-width:170px}
+input,select{width:100%;min-width:0;padding:10px 11px;border:1px solid #cbd5e1;border-radius:11px;background:white;color:var(--ink)}label{display:block;font-size:12px;color:#526176;font-weight:750;margin-bottom:5px}.field{margin-bottom:12px}
+.roster{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.player-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;min-width:0}.player-top{display:flex;justify-content:space-between;gap:8px}.player-name{font-size:16px;font-weight:800;overflow-wrap:anywhere}.muted{font-size:12px;color:var(--muted)}.pill{display:inline-block;border-radius:99px;padding:4px 8px;font-size:10px;font-weight:800;background:var(--blue2);color:#2458a6;white-space:nowrap}.pill.out{background:var(--redbg);color:var(--red)}.pill.good{background:var(--greenbg);color:var(--green)}.meter{height:6px;border-radius:99px;background:#e9edf3;overflow:hidden;margin-top:6px}.meter i{height:100%;display:block;background:var(--blue)}.card-actions{display:flex;gap:7px;margin-top:12px}.card-actions button{flex:1}
+.empty{border:1px dashed #c5cfdd;background:#fff;border-radius:16px;text-align:center;padding:30px 16px;color:var(--muted)}.empty strong{color:var(--ink)}
+.field-grid,.rating-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.rating-box{border:1px solid var(--line);padding:10px;border-radius:12px}.rating-buttons{display:flex;gap:4px}.rating-buttons button{flex:1;background:#edf1f7;color:#526176;padding:8px 0;border-radius:8px}.rating-buttons button.chosen{background:var(--blue);color:white}
+.backdrop{position:fixed;inset:0;background:#081323d9;z-index:20;display:none;align-items:flex-end;justify-content:center;padding:10px}.backdrop.show{display:flex}.modal{background:white;border-radius:20px;width:min(690px,100%);max-height:94dvh;overflow:auto;padding:19px}.modal-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:16px}.modal-head h2{margin:0;font-size:21px}.modal-head button{background:#edf1f7;color:var(--ink)}
+.lineup-controls{display:flex;align-items:end;gap:10px;flex-wrap:wrap}.lineup-controls .field{flex:1;min-width:155px;margin:0}.lineup-controls button{min-height:42px}
+.teams{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.team{background:#fff;border:1px solid var(--line);border-radius:17px;overflow:hidden}.team-head{background:var(--navy);color:#fff;padding:14px 15px;display:flex;justify-content:space-between;gap:8px}.team-head h3{margin:0;font-size:19px}.team-head p{margin:4px 0 0;color:#c4cfdd;font-size:11px}.team-head .scorepill{background:#29384f;color:var(--lime);padding:5px 8px;border-radius:9px;font-size:11px;height:max-content}
+.court{padding:13px;background:linear-gradient(150deg,#e6f4e8,#d6eadb);border-bottom:1px solid #c9dece}.court-label{text-align:center;color:#4b7055;font-size:10px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}.pos-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.slot{min-height:81px;background:#ffffffdf;border:1px solid #c1d7c5;border-radius:11px;padding:7px 4px;text-align:center;display:flex;flex-direction:column;justify-content:center;gap:3px}.slot.goal{grid-column:2}.slot .pos{font-size:10px;color:#56745e}.slot .who{font-size:12px;font-weight:800;overflow-wrap:anywhere}.slot .second{font-size:10px;color:#2458a6;line-height:1.2}.slot .score{font-size:10px;color:#56745e}
+.coverage{padding:13px;border-bottom:1px solid var(--line)}.coverage h4{margin:0 0 9px;font-size:13px}.coverage-row{display:grid;grid-template-columns:minmax(78px,1fr) 1.5fr auto;gap:7px;align-items:center;margin:7px 0;font-size:11px}.coverage-bar{height:7px;background:#edf0f5;border-radius:20px;overflow:hidden}.coverage-bar i{display:block;height:100%;background:var(--green)}.coverage-row.warn .coverage-bar i{background:#e69b24}.coverage-row .status{font-weight:800}.status.ok{color:var(--green)}.status.warn{color:var(--amber)}
+.bench{padding:13px}.bench h4{margin:0 0 8px;font-size:13px}.bench-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.bench-player{background:#f2f5f9;border-radius:10px;padding:9px;font-size:11px;min-width:0;overflow-wrap:anywhere}.bench-player strong{display:block;font-size:12px}.bench-player .second{color:#2458a6;margin-top:3px}.team-foot{border-top:1px solid var(--line);padding:11px 13px;color:var(--muted);font-size:11px}
+.callout{padding:12px;border-radius:12px;font-size:12px;margin:12px 0}.callout.warn{background:var(--amberbg);color:#80500b}.callout.good{background:var(--greenbg);color:#146b4a}.callout.bad{background:var(--redbg);color:#9d2119}
+.subgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.suggestion{border:1px solid var(--line);border-radius:14px;padding:13px;margin-top:10px;background:#fff}.suggestion h4{margin:0 0 6px}.move-list{display:grid;gap:6px;margin:9px 0}.move{display:flex;justify-content:space-between;gap:8px;background:#f3f6fa;border-radius:9px;padding:8px;font-size:12px}.move strong{overflow-wrap:anywhere}.chem-toolbar{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}.chem-group{background:#fff;border:1px solid var(--line);border-radius:15px;margin-bottom:11px;overflow:hidden}.chem-group-head{padding:12px 14px;background:#f6f8fb;display:flex;justify-content:space-between;align-items:center;gap:8px}.chem-group-head strong{font-size:15px}.chem-rel{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;align-items:center;padding:10px 14px;border-top:1px solid #edf0f5}.chem-rel .pair-name{font-size:13px;font-weight:700;overflow-wrap:anywhere}.rating-tag{font-size:11px;font-weight:800;padding:4px 8px;border-radius:99px;white-space:nowrap}.rating-tag.pos{background:var(--greenbg);color:var(--green)}.rating-tag.neg{background:var(--redbg);color:var(--red)}.rating-tag.neu{background:#edf1f7;color:#59677a}
+@media(max-width:700px){header{padding:16px}.brand h1{font-size:19px}.brandmark{width:48px;height:48px}.header-actions{width:100%}.header-actions button{flex:1}main{padding:14px 11px 35px}.head h2{font-size:21px}.roster,.teams,.subgrid{grid-template-columns:1fr}.stats{gap:7px}.stat{padding:11px}.stat strong{font-size:22px}.stat span{font-size:10px}.field-grid,.rating-grid,.chem-toolbar{grid-template-columns:1fr}.tabs{margin-right:-11px}.backdrop{padding:0}.modal{border-radius:20px 20px 0 0;padding:17px}.lineup-controls .field{min-width:125px}.chem-rel{grid-template-columns:minmax(0,1fr) auto}.chem-rel button{grid-column:1/-1}.coverage-row{grid-template-columns:86px minmax(50px,1fr) auto}}
+@media print{header,.tabs,.notice,.no-print,button{display:none!important}body{background:#fff}main{max-width:none;padding:0}.panel{display:none!important}#panel-lineups{display:block!important}.teams{grid-template-columns:repeat(2,minmax(0,1fr))}.team{break-inside:avoid;box-shadow:none}.card{box-shadow:none}}
+
+/* Tabellenansicht */
+.data-table{width:100%;border-collapse:collapse;font-size:12px;background:#fff}.data-table th,.data-table td{text-align:left;padding:9px 7px;border-bottom:1px solid var(--line)}.data-table th{color:var(--muted);font-size:11px;background:#f7f9fc}
+.move-list{display:grid;gap:6px}.move{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:#f7f9fc;border:1px solid var(--line);border-radius:10px;padding:9px;font-size:12px}
+/* Taktikfeld */
+.court-tools{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin:8px 0 12px}
+.court-tools button{padding:8px 10px;font-size:12px}
+.court-tools button.active{background:var(--navy);color:#fff}
+.handball-board{position:relative;width:100%;aspect-ratio:1.18/1;min-height:300px;overflow:hidden;border:2px solid #d6e5d5;border-radius:15px;background:#e6f1e5;background-image:linear-gradient(#ffffff18,#ffffff18);isolation:isolate}
+.handball-board:before{pointer-events:none;content:"";position:absolute;inset:5%;border:2px solid #fff;border-radius:2px}
+.court-half{pointer-events:none;position:absolute;left:5%;right:5%;top:50%;border-top:2px solid #fff}
+.court-center{pointer-events:none;position:absolute;left:50%;top:50%;width:22%;aspect-ratio:1;border:2px solid #fff;border-radius:50%;transform:translate(-50%,-50%)}
+.court-goal{pointer-events:none;position:absolute;left:50%;top:4%;transform:translateX(-50%);width:17%;height:7%;border:3px solid #fff;border-bottom:0;background:#c9d9c9;border-radius:3px 3px 0 0}
+.court-area{pointer-events:none;position:absolute;left:50%;top:5%;width:68%;height:34%;transform:translateX(-50%);border:2px solid #fff;border-top:0;border-radius:0 0 50% 50%}.court-nine{pointer-events:none;position:absolute;left:50%;top:5%;width:88%;height:49%;transform:translateX(-50%);border:2px dashed #fff;border-top:0;border-radius:0 0 50% 50%;opacity:.9}.court-direction{pointer-events:none;position:absolute;top:3%;right:4%;z-index:1;padding:4px 7px;border-radius:7px;background:#ffffffc9;color:#315c38;font-size:10px;font-weight:900;letter-spacing:.05em}
+.profile-icon{font-size:1.45em;line-height:1}.player-photo{width:34px;height:34px;border-radius:50%;object-fit:cover;border:2px solid #fff;transform:scale(1.35);transform-origin:center center}.share-preview{max-width:900px;margin:20px auto;padding:18px}.share-team{margin:18px 0}.share-team h2{margin-bottom:10px}.share-positions{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px}.share-person{border:1px solid var(--line);border-radius:14px;padding:12px;display:flex;align-items:center;gap:10px;background:var(--paper)}.share-avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--blue2);font-size:23px;overflow:hidden;flex-shrink:0}.share-avatar img{width:100%;height:100%;object-fit:cover;transform:scale(1.35);transform-origin:center center}.player-marker{position:absolute;transform:translate(-50%,-50%);width:clamp(48px,8vw,68px);height:clamp(48px,8vw,68px);border-radius:50%;border:3px solid #286749;background:#fff;color:#163b2a;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2px;box-shadow:0 3px 9px #17342124;z-index:10;line-height:1.1;gap:2px;pointer-events:auto;touch-action:manipulation;cursor:pointer}
+.player-marker .marker-pos{font-size:14px;font-weight:900;pointer-events:none}.player-marker .marker-name{font-size:10px;font-weight:750;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;pointer-events:none}
+.player-marker .marker-second{font-size:9px;color:#285c9c;background:#e6f0ff;border-radius:5px;padding:2px 3px;pointer-events:none}
+.bench-marker{width:clamp(42px,5.5vw,58px);height:clamp(42px,5.5vw,58px);border-color:#285c9c;background:#edf4ff;color:#173f73}.player-marker.selected{outline:4px solid #f2a900;outline-offset:2px;background:#fff4d5}
+.player-marker.injured{border-color:#b42318;background:#fff0ee;color:#9c1b13}
+.field-legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-top:9px}
+.legend-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px}
+.live-court-card{margin-top:14px}
+#liveCourt .handball-board{width:100%;max-width:900px;margin:0 auto;aspect-ratio:1.18/1;min-height:0;height:auto}
+#liveCourt .player-marker{width:clamp(46px,6.2vw,68px);height:clamp(46px,6.2vw,68px)}
+@media(max-width:520px){#liveCourt .handball-board{aspect-ratio:0.92/1;min-height:320px}#liveCourt .player-marker{width:clamp(42px,11vw,54px);height:clamp(42px,11vw,54px)}}
+
+.live-bench{margin-top:14px;border:1px solid var(--line);border-radius:14px;padding:12px;background:var(--paper)}
+.live-bench-head{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:9px}
+.live-bench-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.live-bench-player{display:flex;flex-direction:column;gap:3px;min-width:0;padding:10px;border-radius:10px;background:#f2f5f9;font-size:12px}
+.live-bench-player strong{overflow-wrap:anywhere}
+.live-bench-player span{color:#2458a6;font-size:11px}
+.player-marker[draggable="true"]{cursor:grab;touch-action:manipulation}
+.player-marker[draggable="true"]:active{cursor:grabbing}
+@media(max-width:520px){.live-bench-list{grid-template-columns:1fr}.live-bench-head{align-items:flex-start;flex-direction:column}.player-marker{width:clamp(43px,12vw,56px);height:clamp(43px,12vw,56px)}.player-marker .marker-name{font-size:9px}.player-marker .marker-pos{font-size:12px}}
+
+
+/* Väth Handball Coach — refined responsive visual system */
+:root{
+ --bg:#f4f6fa;--paper:#ffffff;--ink:#172235;--muted:#68768b;--line:#e1e7ef;
+ --navy:#111c2e;--navy2:#1d2b42;--lime:#c9f36a;--blue:#356fe0;--blue2:#eaf1ff;
+ --green:#16845b;--greenbg:#e6f7ef;--amber:#a45b05;--amberbg:#fff4dc;
+ --red:#b42318;--redbg:#fff0ee;--shadow:0 8px 28px rgba(20,35,60,.055);
+}
+html{scroll-behavior:smooth}
+body{letter-spacing:-.012em;-webkit-font-smoothing:antialiased}
+header{position:relative;padding-top:22px;padding-bottom:22px;background:radial-gradient(ellipse at 84% 0%,rgba(82,115,154,.35),transparent 36%),linear-gradient(115deg,#101827,#192a40 72%,#20344c)}
+.brandmark{border-radius:18px;box-shadow:0 8px 24px rgba(201,243,106,.18)}
+.brand h1{font-size:clamp(21px,2.4vw,27px);letter-spacing:-.9px}
+.header-actions{gap:9px}
+.header-actions button,.yearbar button{min-height:42px}
+.yearbar{padding-top:15px;gap:10px}
+.yearbar select{width:auto;min-width:150px}
+.yearbar .year-note{font-size:12px}
+main{padding-top:22px}
+.notice{border-radius:14px;padding:12px 15px;line-height:1.55}
+.tabs{gap:6px;padding:5px 0 17px;scrollbar-width:thin;scrollbar-color:#c8d1df transparent}
+.tab{border:1px solid transparent;border-radius:12px;padding:10px 14px;transition:background .18s ease,color .18s ease,border-color .18s ease}
+.tab:hover:not(.active){background:rgba(100,116,139,.09);color:var(--ink)}
+.tab.active{background:var(--navy);color:#fff;box-shadow:0 4px 12px rgba(17,28,46,.15)}
+.head{margin:8px 0 18px;align-items:center}
+.head h2{font-size:clamp(23px,2.7vw,29px);letter-spacing:-.8px;line-height:1.15}
+.head p{max-width:720px;line-height:1.55;font-size:13px}
+.card,.stat,.player-card,.media-item{border-radius:18px;box-shadow:var(--shadow);transition:box-shadow .18s ease,border-color .18s ease,transform .18s ease}
+.stat{padding:17px}
+.stat strong{font-size:27px;letter-spacing:-.8px}
+.stat span{line-height:1.4}
+.player-card{padding:15px}
+.player-card:hover,.media-item:hover{border-color:#cbd7e7;box-shadow:0 12px 30px rgba(20,35,60,.08)}
+.player-name{letter-spacing:-.25px}
+input,select{min-height:42px;border-color:#d3dce8;border-radius:12px;transition:border-color .15s ease,box-shadow .15s ease}
+input:focus,select:focus{border-color:#7da5f3;box-shadow:0 0 0 3px rgba(53,111,224,.12);outline:none}
+label{color:var(--muted);letter-spacing:.01em}
+button{border-radius:12px;min-height:42px;transition:transform .12s ease,filter .15s ease,box-shadow .15s ease}
+button:hover{filter:brightness(1.035)}
+button:active{transform:translateY(1px)}
+button:not(.secondary):not(.dark):not(.lime):not(.danger){box-shadow:0 4px 10px rgba(53,111,224,.13)}
+button.secondary{border:1px solid var(--line)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #91bbff;outline-offset:2px}
+.pill{letter-spacing:.01em}
+.meter{height:7px;background:#edf0f5}
+.rating-box{border-radius:14px;background:color-mix(in srgb,var(--paper) 92%,var(--bg))}
+.empty{border-radius:18px;padding:34px 18px;line-height:1.6}
+.modal{border-radius:22px;box-shadow:0 24px 80px rgba(0,0,0,.22)}
+.player-marker{box-shadow:0 5px 14px rgba(23,52,33,.16);transition:box-shadow .15s ease,outline .15s ease,transform .15s ease}
+.player-marker:hover{box-shadow:0 8px 18px rgba(23,52,33,.22)}
+.player-marker.selected{box-shadow:0 0 0 4px rgba(242,169,0,.18),0 5px 14px rgba(23,52,33,.16)}
+.field-legend{font-size:12px;line-height:1.5}
+.media-item{padding:12px}
+.media-item img,.media-item video{border-radius:12px}
+body.dark{--bg:#0c1421;--paper:#151f2e;--ink:#eef3fa;--muted:#a5b2c5;--line:#2b394d;--navy:#101a29;--blue2:#203452;--shadow:0 8px 28px rgba(0,0,0,.18)}
+body.dark .notice{background:#342b18;border-color:#5a4926;color:#f5d995}
+body.dark .tab:hover:not(.active){background:#202d40;color:#eef3fa}
+body.dark .tab.active{background:#d5f58a;color:#172235}
+body.dark .rating-box{background:#151f2e}
+body.dark .meter{background:#2a3545}
+body.dark .empty{background:#151f2e;border-color:#3a4a60}
+@media(min-width:900px){
+ main{padding-left:22px;padding-right:22px}
+ .roster{gap:14px}
+}
+@media(max-width:760px){
+ header{padding:17px 15px;gap:14px}
+ .brand{gap:10px}.brandmark{width:46px;height:46px;border-radius:15px}.brandmark svg{width:34px;height:34px}
+ .brand h1{font-size:21px}.brand p{font-size:10px;letter-spacing:.02em}
+ .header-actions{display:grid;grid-template-columns:1fr 1fr;width:100%}
+ .header-actions button{padding:10px 9px;font-size:12px;min-height:42px}
+ .yearbar{padding:12px 14px 0;display:grid;grid-template-columns:auto minmax(120px,1fr);gap:8px}
+ .yearbar label{align-self:center}.yearbar select{width:100%;max-width:none}
+ .yearbar #newYearBtn{grid-column:1 / -1;width:100%}
+ .yearbar .year-note{grid-column:1 / -1}
+ main{padding:16px 13px 34px}
+ .tabs{margin:0 -1px 2px;gap:6px;padding-bottom:13px}
+ .tab{padding:10px 12px;font-size:13px}
+ .head{align-items:stretch}
+ .head>button{width:100%}
+ .roster{grid-template-columns:1fr}
+ .stats{gap:7px}.stat{padding:10px 9px;border-radius:14px}.stat strong{font-size:22px}
+ .stat span{font-size:11px}
+ .field-grid,.rating-grid{grid-template-columns:1fr}
+ .card{padding:13px}
+ .lineup-controls{grid-template-columns:1fr!important}
+}
+@media(max-width:380px){
+ .brand p{display:none}
+ .stats{grid-template-columns:1fr 1fr}
+ .stats .stat:last-child{grid-column:1 / -1}
+ .header-actions{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){
+ *,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}
+}
+
+
+
+/* v0.8 polish: aligned lineup, profile crop and settings */
+.photo-crop-editor{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin:12px 0;padding:14px;border:1px solid var(--line);border-radius:16px;background:var(--bg)}
+.photo-crop-frame{width:124px;height:124px;border-radius:50%;overflow:hidden;flex:0 0 124px;border:4px solid var(--paper);box-shadow:0 0 0 2px var(--blue);background:var(--blue2);display:grid;place-items:center}
+.photo-crop-frame img{width:100%;height:100%;object-fit:cover;object-position:50% 50%;transform:scale(1.35);transform-origin:center center}
+.photo-crop-controls{flex:1;min-width:190px}.photo-crop-controls label{display:block;font-size:13px;font-weight:750;margin:7px 0 3px}.photo-crop-controls input[type=range]{width:100%;accent-color:var(--blue)}.crop-preview-stack{display:flex;flex-direction:column;align-items:center;gap:6px}.photo-crop-frame{touch-action:none;cursor:grab;user-select:none}.photo-crop-frame:active{cursor:grabbing}.crop-preview-caption{font-size:11px;color:var(--muted);text-align:center}.photo-crop-controls label output{float:right;color:var(--blue);font-variant-numeric:tabular-nums}.crop-mini-card{display:flex;align-items:center;gap:10px;margin-top:10px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--paper)}.crop-mini-label{font-size:12px;color:var(--muted);flex:1}.crop-mini-avatar{width:42px;height:42px;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:var(--blue2);flex-shrink:0}.crop-mini-avatar img{width:100%;height:100%;object-fit:cover;object-position:50% 50%;transform:scale(1.35);transform-origin:center center}.crop-mini-avatar span{font-size:22px}
+.team-head{align-items:center;justify-content:center;text-align:center;position:relative;padding:16px 54px}
+.team-head>div{width:100%}.team-head h3{font-size:22px;letter-spacing:.01em}.team-head p{font-size:13px}.team-head .scorepill{display:none}
+.court-label{font-size:14px;font-weight:850;letter-spacing:.06em}
+.court-tools{justify-content:center}
+.court-tools button{font-size:14px;min-height:40px;padding:9px 16px}
+.data-table{font-size:15px!important;border-collapse:separate!important;border-spacing:0;width:100%;overflow:hidden;border-radius:12px}
+.data-table th,.data-table td{text-align:center!important;vertical-align:middle;padding:13px 10px!important}
+.data-table th{font-size:14px!important;font-weight:800;white-space:nowrap}
+.data-table td{font-size:14px}
+.move-list{gap:9px}
+.move{display:grid;grid-template-columns:minmax(100px,1fr) minmax(120px,1.2fr) minmax(120px,1fr);align-items:center;text-align:center;gap:12px;padding:13px 12px;font-size:15px}
+.move>span,.move>strong{text-align:center}
+.move>strong{font-size:15px}
+.move .second{font-size:13px}
+#panel-settings .card{max-width:900px;margin:0 auto;padding:clamp(18px,3vw,30px);border-radius:20px}
+#panel-settings h2{font-size:26px;letter-spacing:-.025em;margin-bottom:18px}
+#panel-settings h3{font-size:17px;margin:24px 0 8px;padding-top:18px;border-top:1px solid var(--line)}
+#panel-settings .field{max-width:560px}
+#panel-settings .field label{font-size:14px;font-weight:750}
+#panel-settings select,#panel-settings input{border-radius:12px;min-height:44px}
+#panel-settings button{min-height:44px}
+#panel-settings .muted{line-height:1.6}
+@media(max-width:560px){.team-head{padding:14px}.move{grid-template-columns:1fr;gap:4px}.data-table th,.data-table td{padding:10px 6px!important;font-size:12px!important}.photo-crop-frame{width:100px;height:100px;flex-basis:100px}}
+
+</style>
+
+
+
+<style id="brand-refresh">
+.brandmark{position:relative;overflow:hidden;isolation:isolate}
+.brandmark:after{content:"";position:absolute;inset:0;border:1px solid rgba(16,24,39,.12);border-radius:inherit;pointer-events:none}
+.brandmark svg{position:relative;z-index:1;filter:drop-shadow(0 1px 0 rgba(255,255,255,.15))}
+.brandmark:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+@media (prefers-reduced-motion:no-preference){.brandmark{transition:transform .18s ease,box-shadow .18s ease}.brandmark:hover{transform:translateY(-1px);box-shadow:0 8px 22px #c9f36a40}}
+</style>
+</head>
+<body>
+<header>
+ <div class="brand">
+  <div class="brandmark" aria-label="Väth Handball Coach Logo">
+   <svg viewBox="0 0 64 64" fill="none" aria-hidden="true" role="img">
+    <title>Väth Handball Coach – V und Handballspielerin</title>
+    <path d="M7 10H18L28 42L37 16H47L33 55H23L7 10Z" fill="#101827"/>
+    <circle cx="48" cy="10" r="5" fill="#3578E5" stroke="#101827" stroke-width="1.8"/>
+    <path d="M45 17L39 28L48 33L54 24M40 27L31 24M48 33L41 43M48 33L58 39M45 18L55 17L59 12" stroke="#3578E5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="58" cy="8" r="2.8" fill="#ffffff" stroke="#101827" stroke-width="1.5"/>
+  </svg>
+  </div>
+  <div><h1>Väth <span>Handball Coach</span></h1><p>SMART LINEUPS · LIVE COACHING · TEAM CHEMISTRY</p></div>
+ </div>
+ <div class="header-actions"><button class="secondary" id="shareViewBtn">Spielerinnen-Ansicht teilen</button><button class="secondary" id="exportBtn">Sicherung exportieren</button><button class="lime" id="printBtn">Aufstellung drucken</button></div>
+</header>
+<div class="yearbar no-print">
+ <label for="yearSelect">Team / Saison</label><select id="yearSelect" aria-label="Aktive Saison"></select>
+ <button class="secondary" id="newYearBtn">＋ Neues Jahr</button>
+ <span class="year-note" id="yearStatus">Jede Saison hat eigene Spielerinnen, Teamchemie und Medien.</span>
+</div>
+<main>
+ <div class="notice"><strong>Lokaler Prototyp:</strong> Daten werden in diesem Browser gespeichert. Die Spielerinnen-Ansicht kann als separate HTML-Datei geteilt werden; automatische Live-Synchronisierung benötigt später einen Online-Dienst. Exportiere regelmäßig eine Sicherung.</div>
+ <nav class="tabs no-print">
+  <button class="tab active" data-tab="players">Spielerinnen</button><button class="tab" data-tab="chemistry">Teamchemie</button><button class="tab" data-tab="lineups">Aufstellung</button><button class="tab" data-tab="live">Spiel- &amp; Trainingssimulation</button><button class="tab" data-tab="media">Bildmaterial</button><button class="tab" data-tab="settings">Einstellungen</button>
+ </nav>
+ <section class="panel active" id="panel-players">
+  <div class="head"><div><h2>Dein Kader</h2><p>Fähigkeiten, Positionsprofil und Verfügbarkeit verwalten.</p></div><button id="addPlayer">＋ Spielerin hinzufügen</button></div>
+  <div class="stats"><div class="stat"><strong id="count">0</strong><span>Spielerinnen gesamt</span></div><div class="stat"><strong id="available">0</strong><span>Verfügbar</span></div><div class="stat"><strong id="rated">0%</strong><span>Bewertungen gepflegt</span></div></div>
+  <div class="toolbar"><input id="search" placeholder="Nach Spielerin suchen …"><select id="filter" style="max-width:190px"><option value="all">Alle Spielerinnen</option><option value="yes">Nur verfügbar</option><option value="no">Nicht verfügbar</option></select><button class="secondary" id="demo">Beispielkader laden</button></div>
+  <div class="roster" id="roster"></div>
+ </section>
+ <section class="panel" id="panel-lineups">
+  <div class="head"><div><h2>Aufstellung</h2><p>Berechnete Ausgangsaufstellung für Spiel und Training. Die Simulation übernimmt diese Berechnung als Startpunkt.</p></div></div>
+  <div class="card" style="margin-bottom:14px">
+   <div class="lineup-controls">
+    <div class="field"><label for="strategy">Optimierungsziel</label><select id="strategy"><option value="strong">Maximale individuelle Stärke</option><option value="balanced">A- und B-Team ausbalancieren</option><option value="chemistry">Teamchemie stärker gewichten</option></select></div>
+    <div class="field"><label for="split">Kaderaufteilung</label><select id="split"><option value="flex">Flexibel nach Kadergröße</option><option value="separate">Möglichst getrennte Teams</option><option value="overlap">Überlappung erlauben</option></select></div>
+    <button id="generate">Aufstellungen berechnen</button>
+   </div>
+   <p class="muted" style="margin-bottom:0">Die Zweitposition ist die am besten bewertete Alternative zur besetzten Position. Absicherung zählt ab Positionsbewertung 3/5.</p>
+  </div>
+  <div id="lineupResults"><div class="empty">Füge mindestens sieben verfügbare Spielerinnen hinzu oder lade den Beispielkader.</div></div>
+ </section>
+ <section class="panel" id="panel-live">
+  <div class="head"><div><h2>Spiel- &amp; Trainingssimulation</h2><p>Startet mit der zuletzt berechneten Aufstellung. Die Feldansicht beginnt wie die Grafik in „Aufstellung“ mit Angriff 3:3; Angriffs- und Abwehrformationen lassen sich anschließend umstellen.</p></div></div>
+  <div class="card">
+   <div class="subgrid">
+    <div><label for="liveTeam">Mannschaft</label><select id="liveTeam"><option value="A">A-Team</option><option value="B">B-Team</option></select></div>
+    <div><label for="liveMode">Situation</label><select id="liveMode"><option value="injury">Verletzung / Ausfall</option><option value="sub">Geplanter Wechsel</option></select></div>
+    <div><label for="outgoing">Spielerin, die raus muss</label><select id="outgoing"></select></div>
+    <div><label for="incoming">Einwechselspielerin</label><select id="incoming"></select></div>
+   </div>
+   <div class="subgrid" style="margin-top:12px">
+    <div><label for="livePhase">Spielfase</label><select id="livePhase"><option value="attack">Angriff</option><option value="defense">Abwehr</option></select></div>
+    <div><label for="liveFormation">Formation</label><select id="liveFormation"><option value="3-3">Angriff 3:3</option><option value="2-4">Angriff 2:4</option><option value="7-6">Angriff 7:6</option><option value="5-1">Abwehr 5:1</option><option value="6-0">Abwehr 6:0</option><option value="3-2-1">Abwehr 3:2:1</option><option value="4-2">Abwehr 4:2</option></select></div>
+   </div>
+   <div class="toolbar" style="margin-top:12px;margin-bottom:0"><button id="suggestMoves">Beste Umstellung vorschlagen</button><button class="secondary" id="resetLive">Auswahl zurücksetzen</button></div>
+   <div class="muted" style="margin-top:10px">Die Vorschläge berücksichtigen die Positionsbewertungen und Teamchemie. Sie sind Entscheidungshilfen: Bei Verletzungen hat die Gesundheit Vorrang, und die Trainerin entscheidet, ob eine Spielerin tatsächlich weiterspielen kann.</div>
+  </div>
+  <div class="card live-court-card">
+   <div class="head"><div><h3 style="margin:0">Live-Feldansicht</h3><p>Tippe eine Spielerin und danach eine zweite an, um ihre Positionen zu tauschen.</p></div></div>
+   <div class="court-tools"><button class="active" data-live-view="both">Erst- & Zweitposition</button><button data-live-view="first">Nur Erstposition</button><button data-live-view="second">Nur Zweitposition</button></div>
+   <div id="liveCourt"><div class="empty">Bitte zuerst eine Aufstellung berechnen.</div></div>
+   <div class="toolbar" style="margin-top:12px;margin-bottom:0"><button id="undoLive" class="secondary">Letzten Tausch rückgängig</button><button id="applyLiveCourt" class="lime">Live-Aufstellung in Aufstellung übernehmen</button></div>
+   <p class="muted" style="margin-bottom:0;margin-top:8px">Live-Tausche verändern zunächst nur die Simulation. Mit „übernehmen“ kannst du die aktuelle Feldanordnung in die Aufstellungsansicht kopieren.</p>
+  </div>
+  <div id="liveResults" style="margin-top:14px"><div class="empty">Berechne zuerst eine Aufstellung. Wähle dann die Spielerin, die ausgewechselt wird, und die Einwechselspielerin.</div></div>
+ </section>
+ <section class="panel" id="panel-chemistry">
+  <div class="head"><div><h2>Teamchemie</h2><p>Beliebig viele Beziehungen erfassen und nach Spielerin sortiert ansehen.</p></div><button id="addChem">＋ Beziehung hinzufügen</button></div>
+  <div class="card" style="margin-bottom:13px"><div class="chem-toolbar"><div><label for="chemSort">Sortierung</label><select id="chemSort"><option value="name">Alphabetisch nach Spielerin</option><option value="strong">Beste Beziehungen zuerst</option><option value="weak">Schwierigste Beziehungen zuerst</option></select></div><div><label for="chemFilter">Spielerin filtern</label><select id="chemFilter"><option value="all">Alle Spielerinnen</option></select></div></div><div class="muted">Bewertung: +2 sehr gut, +1 gut, 0 neutral, −1 schwierig, −2 funktioniert schlecht. Du kannst für eine Spielerin mehrere Beziehungen speichern.</div></div>
+  <div id="chemList"></div>
+ </section>
+ <section class="panel" id="panel-media">
+  <div class="head"><div><h2>Bildmaterial</h2><p>Fotos und Videos je Spielerin oder als allgemeines Trainingsmaterial ablegen.</p></div></div>
+  <div class="card" style="margin-bottom:14px">
+   <div class="field"><label for="mediaPlayer">Zuordnung</label><select id="mediaPlayer"><option value="">Allgemeines Material</option></select></div>
+   <div class="field"><label for="mediaCaption">Beschreibung (optional)</label><input id="mediaCaption" maxlength="120" placeholder="z. B. Wurftraining, Abwehrbewegung, Spieltag"></div>
+   <div class="field"><label for="mediaFiles">Fotos oder Videos aufnehmen / auswählen</label><input id="mediaFiles" type="file" accept="image/*,video/*" multiple></div>
+   <p class="muted">Auf unterstützten Mobilgeräten kannst du über die Dateiauswahl auch Kamera oder Videoaufnahme wählen. Dateien werden lokal in diesem Browser gespeichert. Für Videos gilt eine Größenbegrenzung, damit der Browser nicht überlastet wird.</p>
+   <div class="toolbar"><button id="saveMedia">Material hinzufügen</button><button class="secondary" id="clearMediaFilter">Alle anzeigen</button></div>
+  </div>
+  <div id="mediaGallery" class="media-grid"><div class="empty">Noch kein Bildmaterial gespeichert.</div></div>
+ </section>
+ <section class="panel" id="panel-settings">
+  <div class="card">
+   <h2 style="margin-top:0">Einstellungen</h2>
+   <h3>Spielerinnen-Ansicht teilen</h3>
+   <p class="muted">Erstellt eine separate, teilbare Momentaufnahme der aktuellen Aufstellung. Interne Bewertungen, Teamchemie, Notizen und taktische Hintergründe werden nicht exportiert.</p>
+   <div class="field"><label for="shareTeams">Welche Teams anzeigen?</label><select id="shareTeams"><option value="both">A- und B-Team</option><option value="A">Nur A-Team</option><option value="B">Nur B-Team</option></select></div>
+   <button id="shareViewSettingsBtn" type="button">Spielerinnen-Ansicht erstellen</button>
+   <p class="muted">Hinweis: Die Datei ist ein sicherer Stand zum Teilen, aktualisiert sich aber nicht automatisch. Für einen live aktualisierten Link braucht die App später einen geschützten Online-Speicher.</p>
+
+   <h3>Darstellung</h3>
+   <div class="field"><label for="themeSelect">Farbschema</label><select id="themeSelect"><option value="light">Hellmodus</option><option value="dark">Dunkelmodus</option><option value="system">Wie das Gerät</option></select></div>
+   <div class="field"><label for="soundToggle">Töne bei Bedienung</label><select id="soundToggle"><option value="on">Töne eingeschaltet</option><option value="off">Töne ausgeschaltet</option></select></div>
+   <p class="muted">Töne sind kurze, dezente Bestätigungssignale bei wichtigen Aktionen. Du kannst sie jederzeit deaktivieren.</p>
+   <h3>Team / Saison verwalten</h3><p>Jede Saison besitzt einen eigenen Kader, eigene Teamchemie und eigenes Bildmaterial. Wähle die Saison oben im Hauptmenü oder lege ein neues Jahr an.</p>
+   <h3>So bekommst du gute Ergebnisse</h3>
+   <ol><li>Bewerte jede Spielerin ehrlich auf einer Skala von 1 bis 5.</li><li>Vergib mindestens zwei Positionswerte von 3 oder höher pro Spielerin, wenn sie wirklich mehrere Positionen spielen kann.</li><li>Erfasse mehrere Teamchemie-Beziehungen – auch negative, wenn sie für deine Aufstellung relevant sind.</li><li>Generiere die Teams neu, nachdem du Verfügbarkeit oder Bewertungen geändert hast.</li><li>Nutze den Live-Modus, um Ausfälle oder Wechsel durchzuspielen.</li></ol>
+   <h3>Was bedeutet doppelte Positionsabsicherung?</h3><p>Für jede der sieben Positionen zählt die App, wie viele ausgewählte Spielerinnen diese Position mit mindestens 3/5 bewerten. Eine Position gilt als doppelt abgesichert, wenn mindestens zwei Spielerinnen geeignet sind. Der Stammplatz und eine geeignete Zweitposition werden ausdrücklich angezeigt. Wenn nicht genug Spielerinnen im Kader sind, zeigt die App die Lücken offen an, statt sie zu verschweigen.</p>
+   <h3>Datensicherung</h3><p>Die App speichert lokal im Browser. Mit „Sicherung exportieren“ lädst du eine JSON-Datei herunter; importiere sie hier, um die Daten wiederherzustellen. Das ist besonders wichtig, bevor du Browserdaten löschst.</p>
+   <div class="toolbar"><button class="secondary" id="importBtn">Sicherung importieren</button><input type="file" id="importFile" accept=".json,application/json" hidden><button class="danger" id="clearAll">Alle Daten löschen</button></div>
+   <h3>App später verändern</h3><p>Der Quellcode befindet sich in der Datei <code>index.html</code>. Du kannst diese Datei in einem Texteditor wie Visual Studio Code bearbeiten. Speichere eine Kopie, bevor du Änderungen machst. Neue Ideen lassen sich später ergänzen, ohne dass du die App von Grund auf neu bauen musst.</p>
+   <p class="muted">Version 0.5 · HTML, CSS und JavaScript · keine externen Bibliotheken · keine Serververbindung.</p>
+  </div>
+ </section>
+</main>
+<div class="backdrop" id="playerModal" role="dialog" aria-modal="true">
+ <div class="modal"><div class="modal-head"><div><h2 id="playerModalTitle">Spielerin hinzufügen</h2><div class="muted">Bewerte die Fähigkeiten von 1 bis 5.</div></div><button id="closePlayer">✕</button></div>
+ <form id="playerForm"><input type="hidden" id="pid"><div class="field"><label for="pname">Name</label><input id="pname" required maxlength="60" placeholder="Name der Spielerin"></div><div class="field"><label for="pavailable">Verfügbarkeit</label><select id="pavailable"><option value="yes">Verfügbar</option><option value="no">Nicht verfügbar</option></select></div>
+ <h3>Profilbild oder Symbol</h3>
+ <p class="muted">Wähle ein Symbol aus oder lade optional ein Foto hoch. Das Bild wird nur lokal in diesem Browser gespeichert.</p>
+ <div class="field"><label for="picon">Symbol (30 Optionen)</label><select id="picon"></select></div>
+ <div class="field"><label for="pphoto">Eigenes Spielerinnenfoto (optional)</label><input id="pphoto" type="file" accept="image/*" capture="user"><div class="muted" id="photoStatus">Kein neues Foto ausgewählt.</div><div class="photo-crop-editor"><div class="crop-preview-stack"><div class="photo-crop-frame" id="photoCropDrag" title="Du kannst das Bild auch direkt ziehen"><img id="photoCropPreview" alt="Live-Vorschau des runden Profilbild-Ausschnitts" hidden></div><span class="crop-preview-caption">Profilbild · ziehen zum Ausrichten</span></div><div class="photo-crop-controls"><label for="photoCropZoom">Bildgröße <output id="photoCropZoomValue">1,35×</output></label><input id="photoCropZoom" type="range" min="1" max="2.5" step="0.05" value="1.35"><label for="photoCropY">Ausschnitt oben / unten <output id="photoCropYValue">Mitte</output></label><input id="photoCropY" type="range" min="-40" max="40" step="1" value="0"><p class="muted">Mit „Bildgröße“ zoomst du hinein oder heraus. Mit „Ausschnitt oben / unten“ verschiebst du den Bildfokus vertikal. Beide Vorschauen zeigen die Änderung sofort.</p><div class="crop-mini-card"><span class="crop-mini-label">So erscheint es im Kader</span><div class="crop-mini-avatar"><img id="photoCropCardPreview" alt="Vorschau des Profilbilds in der Kaderliste" hidden><span id="photoCropCardFallback">🤾‍♀️</span></div></div></div></div><button type="button" class="secondary small" id="clearPhoto">Foto entfernen</button></div>
+ <h3>Technische Fähigkeiten</h3><div class="rating-grid" id="skillRatings"></div><h3>Positionsfähigkeit</h3><div class="rating-grid" id="posRatings"></div><div class="toolbar" style="justify-content:flex-end;margin-top:16px"><button type="button" class="secondary" id="cancelPlayer">Abbrechen</button><button type="submit">Speichern</button></div></form>
+ </div>
+</div>
+<div class="backdrop" id="chemModal" role="dialog" aria-modal="true">
+ <div class="modal"><div class="modal-head"><div><h2>Beziehung erfassen</h2><div class="muted">Du kannst beliebig viele Paare pro Spielerin hinzufügen.</div></div><button id="closeChem">✕</button></div>
+ <form id="chemForm"><div class="field"><label for="chemA">Ausgangsspielerin</label><select id="chemA" required></select><p class="muted">Füge eine oder beliebig viele Beziehungen hinzu. Jede Spielerin kann eine eigene Bewertung bekommen.</p></div><div id="chemRows"></div><div class="toolbar"><button type="button" class="secondary" id="addChemRow">＋ Weitere Beziehung</button></div><div class="toolbar" style="justify-content:flex-end"><button type="button" class="secondary" id="cancelChem">Abbrechen</button><button type="submit">Beziehungen speichern</button></div></form></div>
+</div>
+<script>
+(()=>{'use strict';
+const POS=[{id:'GK',name:'Torwart',short:'TW'},{id:'LW',name:'Außen links',short:'L'},{id:'LB',name:'Rückraum links',short:'RL'},{id:'CB',name:'Rückraum Mitte',short:'RM'},{id:'RB',name:'Rückraum rechts',short:'RR'},{id:'RW',name:'Außen rechts',short:'R'},{id:'PV',name:'Kreis',short:'K'}];
+const PLAYER_ICONS=['🤾‍♀️','🤾','🏐','⭐','🔥','⚡','🦁','🐯','🐺','🦊','🐼','🐨','🐸','🦋','🌟','💎','❤️','💙','💚','💜','🩷','👑','🎯','🚀','🌈','🍀','🌻','🌙','☀️','🦄'];
+let pendingPhoto=null,removePhoto=false,pendingPhotoZoom=1.35,pendingPhotoY=0;
+const SK=[['attack','Offensivspiel'],['defense','Defensivspiel'],['passing','Passspiel'],['shooting','Wurf'],['vision','Spielübersicht']];
+const STORE='vaethHandballCoach.v2',YEAR_STORE='vaethHandballCoach.years.v1',ACTIVE_YEAR='vaethHandballCoach.activeYear';
+let activeYear=localStorage.getItem(ACTIVE_YEAR)||'2026/27';
+let projects=loadProjects(),data=load(),lastTeams=null;
+function blankYear(){return{players:[],chemistry:[],media:[]}}
+function loadProjects(){try{let x=JSON.parse(localStorage.getItem(YEAR_STORE));if(x&&typeof x==='object'&&!Array.isArray(x)&&Object.keys(x).length)return x}catch(e){};try{let old=JSON.parse(localStorage.getItem(STORE));if(old&&Array.isArray(old.players)){let migrated={players:old.players,chemistry:Array.isArray(old.chemistry)?old.chemistry:[],media:[]};let out={};out[activeYear]=migrated;return out}}catch(e){}return {[activeYear]:blankYear()}}
+function load(){let d=projects[activeYear];if(d&&Array.isArray(d.players))return{players:d.players,chemistry:Array.isArray(d.chemistry)?d.chemistry:[],media:Array.isArray(d.media)?d.media:[]};return blankYear()}
+function save(){try{projects[activeYear]=data;localStorage.setItem(YEAR_STORE,JSON.stringify(projects));localStorage.setItem(ACTIVE_YEAR,activeYear);localStorage.setItem(STORE,JSON.stringify(data))}catch(e){alert('Speichern im Browser fehlgeschlagen. Große Videos können den Speicher füllen. Bitte exportiere eine Sicherung und verwende kleinere Dateien.')}}function id(){return'p'+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function byId(i){return data.players.find(p=>p.id===i)}function val(p,k){return Number(p.skills?.[k]||1)}function pv(p,k){return Number(p.positions?.[k]||1)}
+function primaryPos(p){return POS.slice().sort((a,b)=>pv(p,b.id)-pv(p,a.id))[0]}function secondaryPos(p,primary){return POS.filter(x=>x.id!==primary).sort((a,b)=>pv(p,b.id)-pv(p,a.id))[0]}
+function chemistry(a,b){let c=data.chemistry.find(x=>(x.a===a&&x.b===b)||(x.a===b&&x.b===a));return c?Number(c.score):0}
+function switchTab(t){document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.tab===t));document.querySelectorAll('.panel').forEach(x=>x.classList.toggle('active',x.id==='panel-'+t));if(t==='live')refreshLiveSelectors()}
+document.querySelectorAll('.tab').forEach(x=>x.onclick=()=>switchTab(x.dataset.tab));
+function render(){const s=document.getElementById('search').value.toLowerCase(),f=document.getElementById('filter').value,all=data.players,avail=all.filter(p=>p.available);
+document.getElementById('count').textContent=all.length;document.getElementById('available').textContent=avail.length;
+const total=all.length*(SK.length+POS.length)*5,got=all.reduce((n,p)=>n+SK.reduce((a,k)=>a+val(p,k[0]),0)+POS.reduce((a,k)=>a+pv(p,k.id),0),0);document.getElementById('rated').textContent=total?Math.round(got/total*100)+'%':'0%';
+const ps=all.filter(p=>(!s||p.name.toLowerCase().includes(s))&&(f==='all'||(f==='yes'?p.available:!p.available)));
+document.getElementById('roster').innerHTML=ps.length?ps.map(p=>{let primary=primaryPos(p),sec=secondaryPos(p,primary.id),avg=SK.reduce((n,k)=>n+val(p,k[0]),0)/SK.length;return `<article class="player-card"><div class="player-top"><div style="display:flex;align-items:center;gap:10px"><div class="share-avatar">${p.photo?`<img class="player-photo" src="${p.photo}" alt="" style="object-position:50% ${50+(p.photoY??0)}%;transform:scale(${p.photoZoom??1.35});transform-origin:center center">`:esc(p.icon||"🤾‍♀️")}</div><div><div class="player-name">${esc(p.name)}</div><div class="muted">Hauptposition: ${esc(primary.name)} · Zweitposition: ${esc(sec.name)} (${pv(p,sec.id)}/5)</div></div></div><span class="pill ${p.available?'':'out'}">${p.available?'Verfügbar':'Abwesend'}</span></div><div style="margin-top:12px;font-size:12px;display:flex;justify-content:space-between"><span>Technikprofil</span><strong>${avg.toFixed(1)}/5</strong></div><div class="meter"><i style="width:${avg/5*100}%"></i></div><div class="muted" style="margin-top:9px">Positionen ≥ 3: ${POS.filter(x=>pv(p,x.id)>=3).map(x=>x.short).join(', ')||'Noch keine'}</div><div class="card-actions"><button class="secondary" data-edit="${p.id}">Bearbeiten</button><button class="danger" data-del="${p.id}">Löschen</button></div></article>`}).join(''):`<div class="empty" style="grid-column:1/-1"><strong>${all.length?'Keine Treffer':'Dein Kader beginnt hier'}</strong><p>${all.length?'Passe Suche oder Filter an.':'Füge Spielerinnen hinzu oder lade Beispieldaten.'}</p><button id="emptyAdd">＋ Spielerin hinzufügen</button></div>`;
+document.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>openPlayer(b.dataset.edit));document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>deletePlayer(b.dataset.del));const ea=document.getElementById('emptyAdd');if(ea)ea.onclick=()=>openPlayer();renderChemistry();refreshLiveSelectors()}
+function ratingMarkup(group,items,values){return items.map(x=>{let key=x.id||x[0],name=x.name||x[1];return `<div class="rating-box"><label>${esc(name)}</label><div class="rating-buttons">${[1,2,3,4,5].map(n=>`<button type="button" data-group="${group}" data-key="${key}" data-v="${n}" class="${Number(values[key]||1)===n?'chosen':''}">${n}</button>`).join('')}</div></div>`}).join('')}
+function initPlayerIcons(){const el=document.getElementById('picon');if(el&&!el.options.length)el.innerHTML=PLAYER_ICONS.map((x,i)=>`<option value="${esc(x)}">${i+1}. ${x}</option>`).join('')}
+document.getElementById('pphoto').onchange=async e=>{const f=e.target.files?.[0];if(!f)return;if(!f.type.startsWith('image/')){alert('Bitte eine Bilddatei auswählen.');e.target.value='';return}if(f.size>3*1024*1024){alert('Bitte ein Bild unter 3 MB verwenden.');e.target.value='';return}pendingPhoto=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(f)});removePhoto=false;pendingPhotoZoom=1.35;pendingPhotoY=0;document.getElementById('photoCropZoom').value=pendingPhotoZoom;document.getElementById('photoCropY').value=0;const preview=document.getElementById('photoCropPreview');preview.src=pendingPhoto;preview.hidden=false;const cardPreview=document.getElementById('photoCropCardPreview');cardPreview.src=pendingPhoto;cardPreview.hidden=false;document.getElementById('photoCropCardFallback').hidden=true;updatePhotoCrop();document.getElementById('photoStatus').textContent='Neues Foto ausgewählt. Der Fokus ist zentriert. Passe den Zoom live an.'};
+function updatePhotoCrop(){pendingPhotoZoom=+document.getElementById('photoCropZoom').value;pendingPhotoY=+document.getElementById('photoCropY').value;const posY=Math.max(0,Math.min(100,50+pendingPhotoY));['photoCropPreview','photoCropCardPreview'].forEach(id=>{const el=document.getElementById(id);if(el){el.style.objectPosition=`50% ${posY}%`;el.style.transform=`scale(${pendingPhotoZoom})`;el.style.transformOrigin='center center'}});document.getElementById('photoCropZoomValue').textContent=pendingPhotoZoom.toFixed(2).replace('.',',')+'×';document.getElementById('photoCropYValue').textContent=pendingPhotoY===0?'Mitte':pendingPhotoY<0?`${Math.abs(pendingPhotoY)}% nach oben`:`${pendingPhotoY}% nach unten`}
+document.getElementById('photoCropZoom').oninput=updatePhotoCrop;document.getElementById('photoCropY').oninput=updatePhotoCrop;
+document.getElementById('clearPhoto').onclick=()=>{pendingPhoto=null;removePhoto=true;pendingPhotoZoom=1.35;pendingPhotoY=0;document.getElementById('photoCropZoom').value=pendingPhotoZoom;document.getElementById('photoCropY').value=0;updatePhotoCrop();document.getElementById('pphoto').value='';document.getElementById('photoStatus').textContent='Foto wird entfernt; das Symbol wird angezeigt.';document.getElementById('photoCropPreview').hidden=true;document.getElementById('photoCropPreview').src='';document.getElementById('photoCropCardPreview').hidden=true;document.getElementById('photoCropCardPreview').src='';document.getElementById('photoCropCardFallback').hidden=false};
+function openPlayer(pid){let p=pid?byId(pid):null;initPlayerIcons();pendingPhoto=null;removePhoto=false;pendingPhotoZoom=p?.photoZoom??1.35;pendingPhotoY=p?.photoY??0;document.getElementById('pphoto').value='';document.getElementById('photoCropZoom').value=pendingPhotoZoom;document.getElementById('photoCropY').value=pendingPhotoY;document.getElementById('photoCropPreview').hidden=!p?.photo;document.getElementById('photoCropPreview').src=p?.photo||'';const cardPreview=document.getElementById('photoCropCardPreview');cardPreview.src=p?.photo||'';cardPreview.hidden=!p?.photo;document.getElementById('photoCropCardFallback').hidden=!!p?.photo;updatePhotoCrop();document.getElementById('photoStatus').textContent=p?.photo?'Vorhandenes Foto geladen. Passe den Zoom live an.':'Kein Foto gespeichert.';document.getElementById('picon').value=p?.icon||PLAYER_ICONS[0];document.getElementById('playerModalTitle').textContent=p?'Spielerin bearbeiten':'Spielerin hinzufügen';document.getElementById('pid').value=p?.id||'';document.getElementById('pname').value=p?.name||'';document.getElementById('pavailable').value=p?.available===false?'no':'yes';document.getElementById('skillRatings').innerHTML=ratingMarkup('skill',SK.map(([id,name])=>({id,name})),p?.skills||{});document.getElementById('posRatings').innerHTML=ratingMarkup('pos',POS,p?.positions||{});
+document.querySelectorAll('#playerModal [data-group]').forEach(b=>b.onclick=()=>{let q=b.dataset.group,k=b.dataset.key;document.querySelectorAll(`#playerModal [data-group="${q}"][data-key="${k}"]`).forEach(x=>x.classList.toggle('chosen',x===b))});document.getElementById('playerModal').classList.add('show')}
+function closePlayer(){document.getElementById('playerModal').classList.remove('show')}document.getElementById('addPlayer').onclick=()=>openPlayer();document.getElementById('closePlayer').onclick=closePlayer;document.getElementById('cancelPlayer').onclick=closePlayer;
+document.getElementById('playerForm').onsubmit=e=>{e.preventDefault();let pid=document.getElementById('pid').value||id(),old=byId(pid),skills={},positions={};document.querySelectorAll('#skillRatings [data-key].chosen').forEach(b=>skills[b.dataset.key]=+b.dataset.v);document.querySelectorAll('#posRatings [data-key].chosen').forEach(b=>positions[b.dataset.key]=+b.dataset.v);SK.forEach(([k])=>skills[k] ||= old?.skills?.[k]||1);POS.forEach(p=>positions[p.id] ||= old?.positions?.[p.id]||1);let p={id:pid,name:document.getElementById('pname').value.trim(),available:document.getElementById('pavailable').value==='yes',skills,positions,icon:document.getElementById('picon').value||PLAYER_ICONS[0],photo:removePhoto?'':(pendingPhoto||old?.photo||''),photoZoom:pendingPhotoZoom,photoY:pendingPhotoY};if(old)data.players=data.players.map(x=>x.id===pid?p:x);else data.players.push(p);save();closePlayer();render()};
+function deletePlayer(pid){let p=byId(pid);if(!p||!confirm(`„${p.name}“ und zugehörige Beziehungen löschen?`))return;data.players=data.players.filter(x=>x.id!==pid);data.chemistry=data.chemistry.filter(c=>c.a!==pid&&c.b!==pid);save();render()}
+document.getElementById('search').oninput=render;document.getElementById('filter').onchange=render;
+function chemistryMarkup(){const list=document.getElementById('chemList'),sort=document.getElementById('chemSort').value,filter=document.getElementById('chemFilter').value;const psel=document.getElementById('chemFilter'),old=psel.value;psel.innerHTML='<option value="all">Alle Spielerinnen</option>'+data.players.slice().sort((a,b)=>a.name.localeCompare(b.name,'de')).map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('');if(data.players.some(p=>p.id===old))psel.value=old;
+let rel=data.chemistry.map((c,i)=>({...c,i,aP:byId(c.a),bP:byId(c.b)})).filter(c=>c.aP&&c.bP&&(filter==='all'||c.a===filter||c.b===filter));
+rel.sort((a,b)=>sort==='strong'?(b.score-a.score)||a.aP.name.localeCompare(b.aP.name,'de'):sort==='weak'?(a.score-b.score)||a.aP.name.localeCompare(b.aP.name,'de'):a.aP.name.localeCompare(b.aP.name,'de')||a.bP.name.localeCompare(b.bP.name,'de'));
+if(!rel.length){list.innerHTML='<div class="empty">Noch keine passenden Beziehungen. Wähle „Beziehung hinzufügen“, um mehrere Verbindungen pro Spielerin anzulegen.</div>';return}
+let groups=[];if(sort==='name'){let map=new Map();rel.forEach(c=>{if(!map.has(c.aP.id))map.set(c.aP.id,[]);map.get(c.aP.id).push(c);if(!map.has(c.bP.id))map.set(c.bP.id,[]);map.get(c.bP.id).push({...c,displayReverse:true})});groups=Array.from(map.entries()).filter(([pid])=>filter==='all'||pid===filter).map(([pid,items])=>({p:byId(pid),items:items.filter((x,i,ar)=>ar.findIndex(y=>y.i===x.i)===i)})).filter(g=>g.items.length).sort((a,b)=>a.p.name.localeCompare(b.p.name,'de'))}
+else groups=[{p:null,items:rel}];
+list.innerHTML=groups.map(g=>`<div class="chem-group">${g.p?`<div class="chem-group-head"><strong>${esc(g.p.name)}</strong><span class="muted">${g.items.length} Beziehung(en)</span></div>`:''}${g.items.map(c=>{let other=c.displayReverse?c.aP:c.bP,score=+c.score;return `<div class="chem-rel"><div class="pair-name">${g.p?'↔ '+esc(other.name):esc(c.aP.name)+' ↔ '+esc(c.bP.name)}</div><span class="rating-tag ${score>0?'pos':score<0?'neg':'neu'}">${score>0?'+':''}${score} · ${score===2?'Sehr gut':score===1?'Gut':score===0?'Neutral':score===-1?'Schwierig':'Schlecht'}</span><button class="danger small" data-chem-del="${c.i}">Entfernen</button></div>`}).join('')}</div>`).join('');
+list.querySelectorAll('[data-chem-del]').forEach(b=>b.onclick=()=>{data.chemistry.splice(+b.dataset.chemDel,1);save();renderChemistry()})}
+function renderChemistry(){chemistryMarkup()}
+document.getElementById('chemSort').onchange=renderChemistry;document.getElementById('chemFilter').onchange=renderChemistry;
+function relationRowMarkup(){let opts=data.players.slice().sort((a,b)=>a.name.localeCompare(b.name,'de')).map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('');return `<div class="chem-row field-grid" style="border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:9px"><div class="field"><label>Partnerin</label><select class="chem-partner" required>${opts}</select></div><div class="field"><label>Zusammenspiel</label><select class="chem-score"><option value="2">+2 · Sehr gut</option><option value="1">+1 · Gut</option><option value="0">0 · Neutral</option><option value="-1">−1 · Schwierig</option><option value="-2">−2 · Schlecht</option></select><button type="button" class="danger small chem-remove" style="margin-top:7px">Diese Beziehung entfernen</button></div></div>`}
+function addChemRow(){document.getElementById('chemRows').insertAdjacentHTML('beforeend',relationRowMarkup());let rows=[...document.querySelectorAll('.chem-row')];rows.at(-1).querySelector('.chem-remove').onclick=()=>{if(document.querySelectorAll('.chem-row').length>1)rows.at(-1).remove();else rows.at(-1).querySelector('.chem-partner').selectedIndex=0;};}
+function openChem(){if(data.players.length<2){alert('Bitte lege mindestens zwei Spielerinnen an.');return}let opts=data.players.slice().sort((a,b)=>a.name.localeCompare(b.name,'de')).map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('');document.getElementById('chemA').innerHTML=opts;document.getElementById('chemRows').innerHTML='';addChemRow();document.getElementById('chemModal').classList.add('show')}
+function closeChem(){document.getElementById('chemModal').classList.remove('show')}document.getElementById('addChem').onclick=openChem;document.getElementById('closeChem').onclick=closeChem;document.getElementById('cancelChem').onclick=closeChem;document.getElementById('addChemRow').onclick=addChemRow;
+document.getElementById('chemForm').onsubmit=e=>{e.preventDefault();let a=document.getElementById('chemA').value,rows=[...document.querySelectorAll('.chem-row')],pending=[];for(let row of rows){let b=row.querySelector('.chem-partner').value,score=+row.querySelector('.chem-score').value;if(a===b){alert('Die Ausgangsspielerin kann nicht mit sich selbst verknüpft werden.');return}if(pending.some(c=>c.b===b)){alert('Bitte wähle jede Partnerin nur einmal aus.');return}pending.push({b,score})}for(let item of pending){let b=item.b;data.chemistry=data.chemistry.filter(c=>!((c.a===a&&c.b===b)||(c.a===b&&c.b===a)));data.chemistry.push({a,b,score:item.score})}save();closeChem();renderChemistry()};
+function skillScore(p,pos){let attack=(val(p,'attack')+val(p,'shooting')+val(p,'vision'))/3,def=val(p,'defense'),pass=val(p,'passing'),vision=val(p,'vision');if(pos.id==='GK')return pv(p,pos.id)*.68+def*.18+vision*.1+pass*.04;if(pos.id==='PV')return pv(p,pos.id)*.48+attack*.25+def*.15+pass*.06+val(p,'shooting')*.06;return pv(p,pos.id)*.46+attack*.2+def*.12+pass*.12+vision*.1}
+function chemTotal(ids){let s=0;for(let i=0;i<ids.length;i++)for(let j=i+1;j<ids.length;j++)s+=chemistry(ids[i],ids[j]);return s}
+function teamValue(t){return t.reduce((n,x)=>n+x.value,0)+chemTotal(t.map(x=>x.player.id))*.16}
+function buildTeam(pool,opts={}){if(pool.length<7)return{starters:[],bench:[],score:0};let best=null,tries=Math.min(100,Math.max(30,pool.length*5));for(let k=0;k<tries;k++){let used=new Set(),starters=[];let order=POS.slice().sort((a,b)=>pool.filter(p=>pv(p,a.id)>=3).length-pool.filter(p=>pv(p,b.id)>=3).length);if(k%2)order.reverse();for(let pos of order){let candidates=pool.filter(p=>!used.has(p.id)).map(p=>{let cs=starters.reduce((n,x)=>n+chemistry(p.id,x.player.id),0);let value=skillScore(p,pos)+(opts.chemistry?cs*.22:cs*.08)+(Math.random()*.04);return{player:p,pos,value}}).sort((a,b)=>b.value-a.value);if(candidates.length){starters.push(candidates[0]);used.add(candidates[0].player.id)}}if(starters.length!==7)continue;let score=teamValue(starters);for(let s of starters){let alt=Math.max(...POS.filter(p=>p.id!==s.pos.id).map(p=>pv(s.player,p.id)));score+=alt*.09}if(!best||score>best.score)best={starters,bench:pool.filter(p=>!used.has(p.id)).sort((a,b)=>overall(b)-overall(a)).slice(0,2),score}}return best||{starters:[],bench:[],score:0}}
+function overall(p){return SK.reduce((s,k)=>s+val(p,k[0]),0)/SK.length}
+function ids(t){return [...t.starters.map(s=>s.player.id),...t.bench.map(p=>p.id)]}
+function generate(){let avail=data.players.filter(p=>p.available),out=document.getElementById('lineupResults');if(avail.length<7){out.innerHTML=`<div class="empty">Du brauchst mindestens 7 verfügbare Spielerinnen. Aktuell: ${avail.length}.</div>`;return}
+let mode=document.getElementById('split').value,strategy=document.getElementById('strategy').value,opts={chemistry:strategy==='chemistry'},A=buildTeam(avail,opts),B;
+if(avail.length>=14&&mode==='separate'){let pool=avail.filter(p=>!ids(A).includes(p.id));B=pool.length>=7?buildTeam(pool,opts):buildTeam(avail.filter(p=>!A.starters.some(s=>s.player.id===p.id)),opts)}
+else if(avail.length>=14&&mode==='flex'){let pool=avail.filter(p=>!A.starters.some(s=>s.player.id===p.id));if(pool.length<7)pool=avail;B=buildTeam(pool,opts)}
+else if(mode==='overlap'){B=buildTeam(avail.filter(p=>!A.bench.some(b=>b.id===p.id)),opts)}
+else B=buildTeam(avail,opts);
+if(B.starters.length<7)B=buildTeam(avail,opts);lastTeams={A,B};liveStates.A=null;liveStates.B=null;liveHistory={A:[],B:[]};renderTeams();refreshLiveSelectors()}
+function renderTeams(){if(!lastTeams)return;document.getElementById('lineupResults').innerHTML=`<div class="teams">${teamMarkup('A-Team',lastTeams.A)}${teamMarkup('B-Team',lastTeams.B)}</div><div class="card" style="margin-top:13px"><strong>Wichtig</strong><p class="muted">Die Absicherung wird für die sieben Stammpositionen und die jeweils ausgewählten Bankspielerinnen gemeinsam geprüft. Grün = mindestens zwei geeignete Spielerinnen; orange = nur eine; rot = keine. Bei weniger als 18 verfügbaren Spielerinnen können A und B überlappen.</p><button class="secondary" onclick="window.print()">Drucken / als PDF sichern</button></div>`}
+const lineupView={A:'both',B:'both'},lineupLayout={A:'graphic',B:'graphic'};
+const liveStates={A:null,B:null};let liveSelectedPos=null,livePhase='attack',liveFormation='3-3';
+function markerPositions(formation,phase){
+ if(phase==='defense'){
+  const m={'6-0':{GK:[50,11],LW:[13,28],LB:[29,27],CB:[43,25],RB:[57,25],RW:[87,28],PV:[72,27]},'5-1':{GK:[50,11],LW:[13,29],LB:[30,29],CB:[50,42],RB:[70,29],RW:[87,29],PV:[50,27]},'3-2-1':{GK:[50,11],LW:[17,29],LB:[36,28],CB:[50,43],RB:[64,28],RW:[83,29],PV:[50,55]},'4-2':{GK:[50,11],LW:[14,28],LB:[32,28],CB:[43,43],RB:[57,43],RW:[86,28],PV:[70,28]}};return m[formation]||m['6-0'];
+ }
+ // Angriffsrichtung ist vom eigenen Tor oben nach unten. Die Positionsnamen werden aus Sicht der angreifenden Spielerinnen gelesen: LA liegt daher rechts im Bild, RA links.
+ const m={'3-3':{GK:[50,11],LW:[87,36],LB:[70,53],CB:[50,54],RB:[30,53],RW:[13,36],PV:[50,30]},'2-4':{GK:[50,11],LW:[86,35],LB:[65,52],CB:[50,32],RB:[35,52],RW:[14,35],PV:[50,24]},'7-6':{GK:[50,11],LW:[87,35],LB:[70,52],CB:[50,52],RB:[30,52],RW:[13,35],PV:[50,28]}};return m[formation]||m['3-3'];
+}
+function courtMarkup(team,interactive,view='both',phase='attack',formation='3-3'){
+ const order=['GK','LW','LB','CB','RB','RW','PV'],posMap=markerPositions(formation,phase);
+ const players=interactive?(liveStates[team]||{}):Object.fromEntries((lastTeams?.[team]?.starters||[]).map(x=>[x.pos.id,x.player]));
+ const chosen=interactive?liveSelectedPos:(lineupSelected?.team===team?lineupSelected.slot:null);
+ const benchPlayers=interactive?(liveBenchStates[team]||(lastTeams?.[team]?.bench||[])):(lastTeams?.[team]?.bench||[]);
+ const benchMarkup=benchPlayers.map((p,i)=>`<button type="button" class="player-marker bench-marker ${chosen===`BENCH${i}`?'selected':''}" style="left:${benchPlayers.length===1?50:(i===0?34:66)}%;top:88%" ${interactive?`data-live-pos="BENCH${i}" draggable="true"`:`data-lineup-pos="BENCH${i}" data-lineup-team="${team}"`} aria-label="Bank: ${esc(p?.name||'leer')}" ${p?'':'disabled'}><span class="marker-pos">B${i+1}</span><span class="marker-name">${esc(p?.name||'Leer')}</span></button>`).join('');
+ return `<div class="handball-board" data-court="${team}"><div class="court-goal"></div><div class="court-area"></div><div class="court-nine"></div><div class="court-direction">${phase==='attack'?'ANGRIFF ↓':'ABWEHR ↑'}</div><div class="court-half"></div><div class="court-center"></div>`+
+ order.map(pid=>{let p=players[pid],pos=POS.find(x=>x.id===pid),xy=posMap[pid]||[50,50],second=p?secondaryPos(p,pid):null;return `<button type="button" class="player-marker ${chosen===pid?'selected':''} ${p&&!p.available?'injured':''}" style="left:${xy[0]}%;top:${xy[1]}%" ${interactive?`data-live-pos="${pid}" draggable="true" aria-label="${esc(pos.name)}: ${esc(p?.name||'Nicht besetzt')}. Antippen oder ziehen zum Tauschen"`:(lastTeams?`data-lineup-pos="${pid}" data-lineup-team="${team}" aria-label="${esc(pos.name)}: ${esc(p?.name||'Offen')}"`:'disabled')}><span class="marker-pos">${pos.short}</span><span class="marker-name">${esc(p?.name||'Offen')}</span>${p&&view==='both'&&second?`<span class="marker-second">2. ${second.short}</span>`:''}${p&&view==='second'&&second?`<span class="marker-second">${second.short}</span>`:''}</button>`}).join('')+benchMarkup+`</div><div class="field-legend"><span><i class="legend-dot" style="background:#286749"></i>Erstposition</span>${view!=='first'?'<span><i class="legend-dot" style="background:#8ab6ed"></i>Zweitposition</span>':''}${interactive?'<span>Antippen: zwei Positionen wählen · Ziehen: direkt tauschen</span>':''}</div>`;
+}
+function teamMarkup(name,t){
+ let arr=t.starters,team=name.startsWith('A')?'A':'B',view=lineupView[team],layout=lineupLayout[team];
+ let selected=[...arr.map(x=>x.player),...t.bench],cover=POS.map(p=>{let n=selected.filter(x=>pv(x,p.id)>=3).length,ok=n>=2;return `<div class="coverage-row ${ok?'':'warn'}"><span>${esc(p.name)}</span><div class="coverage-bar"><i style="width:${Math.min(100,n/2*100)}%"></i></div><span class="status ${ok?'ok':'warn'}">${n}/2 ${ok?'✓':'!'}</span></div>`}).join('');
+ let bench=t.bench.length?t.bench.map(p=>{let pri=primaryPos(p),sec=secondaryPos(p,pri.id);return `<div class="bench-player"><strong>${esc(p.name)}</strong><div class="second">2. Pos.: ${esc(sec.name)} (${pv(p,sec.id)}/5)</div><div class="muted">Beste Position: ${esc(pri.name)}</div></div>`}).join(''):'<div class="bench-player">Keine Bankspielerin verfügbar</div>';
+ let under=POS.filter(p=>selected.filter(x=>pv(x,p.id)>=3).length<2);
+ let table=`<div style="overflow:auto"><table class="data-table"><thead><tr><th>Position</th><th>Name</th><th>Zweite Position</th></tr></thead><tbody>${['GK','LW','LB','CB','RB','RW','PV'].map(pid=>{let x=arr.find(a=>a.pos.id===pid),pos=POS.find(p=>p.id===pid),sec=x?secondaryPos(x.player,pid):null;return `<tr><td>${pos.short} · ${esc(pos.name)}</td><td>${esc(x?.player.name||'Offen')}</td><td>${sec?sec.short+' · '+esc(sec.name):'—'}</td></tr>`}).join('')}</tbody></table></div>`;
+ let list=`<div class="move-list"><div class="move move-heading"><span><strong>Position</strong></span><strong>Name</strong><span><strong>Zweite Position</strong></span></div>${['GK','LW','LB','CB','RB','RW','PV'].map(pid=>{let x=arr.find(a=>a.pos.id===pid),pos=POS.find(p=>p.id===pid),sec=x?secondaryPos(x.player,pid):null;return `<div class="move"><span><strong>${pos.short}</strong> · ${esc(pos.name)}</span><strong>${esc(x?.player.name||'Offen')}</strong><span class="second">${sec?sec.short+' · '+esc(sec.name):'—'}</span></div>`}).join('')}</div>`;
+ let mainView=layout==='graphic'?courtMarkup(team,false,view,'attack','3-3')+`<div class="muted" style="margin-top:8px">Wechsel: Tippe zuerst einen blauen Bankkreis und danach eine Feldposition. Die Spielerinnen tauschen die Plätze.</div>`:layout==='table'?table:list;
+ return `<article class="team"><div class="team-head"><div><h3>${name}</h3><p>${arr.length}/7 Positionen · ${t.bench.length}/2 Bank</p></div><span class="scorepill">Wert ${t.score.toFixed(1)}</span></div><div class="court"><div class="court-label">Feldaufstellung</div><div class="court-tools"><button class="${layout==='graphic'?'active':''}" data-layout="${team}:graphic">Grafik</button><button class="${layout==='table'?'active':''}" data-layout="${team}:table">Tabelle</button><button class="${layout==='list'?'active':''}" data-layout="${team}:list">Liste</button></div>${layout==='graphic'?`<div class="court-tools" data-lineup-tools="${team}"><button class="${view==='first'?'active':''}" data-view="${team}:first">Erstposition</button><button class="${view==='both'?'active':''}" data-view="${team}:both">Beide</button><button class="${view==='second'?'active':''}" data-view="${team}:second">Zweitposition</button></div>`:''}${mainView}${layout==='graphic'?'<div class="muted" style="margin-top:8px">Angriffsgrundordnung · 3:3</div>':''}</div><div class="coverage"><h4>Doppelte Positionsabsicherung</h4>${cover}${under.length?`<div class="callout warn" style="margin-bottom:0">Noch nicht doppelt abgesichert: ${under.map(p=>esc(p.name)).join(', ')}.</div>`:`<div class="callout good" style="margin-bottom:0">Alle sieben Positionen sind mindestens doppelt abgedeckt.</div>`}</div><div class="bench"><h4>Bank</h4><div class="bench-list">${bench}</div></div><div class="team-foot">Die Grafik zeigt die Positionen auf dem Feld. Zweitpositionen sind optional einblendbar.</div></article>`;
+}
+document.getElementById('generate').onclick=generate;
+let liveCourtView='both',liveHistory={A:[],B:[]},liveBenchStates={A:null,B:null},lineupSelected=null;
+function renderLiveCourt(){
+ const team=document.getElementById('liveTeam').value;
+ if(!lastTeams){document.getElementById('liveCourt').innerHTML='<div class="empty">Bitte zuerst eine Aufstellung berechnen.</div>';return}
+ if(!liveStates[team])liveStates[team]=Object.fromEntries(lastTeams[team].starters.map(x=>[x.pos.id,x.player]));
+ if(!liveBenchStates[team])liveBenchStates[team]=[...(lastTeams[team]?.bench||[])];
+ const bench=liveBenchStates[team]||[];
+ document.getElementById('liveCourt').innerHTML=courtMarkup(team,true,liveCourtView,livePhase,liveFormation)+`<div class="muted" style="margin-top:8px">Blaue Kreise = Bank. Tippe eine Bankspielerin und anschließend eine Feldposition an, um einzuwechseln. Die ausgewechselte Spielerin kommt auf die Bank.</div>`
+ document.querySelectorAll('[data-live-view]').forEach(b=>b.classList.toggle('active',b.dataset.liveView===liveCourtView));
+}
+function setLiveFormationFromPhase(){
+ const phase=document.getElementById('livePhase').value;
+ livePhase=phase;
+ const select=document.getElementById('liveFormation');
+ if(phase==='defense'&&!['5-1','6-0','3-2-1','4-2'].includes(select.value))select.value='5-1';
+ if(phase==='attack'&&!['3-3','2-4','7-6'].includes(select.value))select.value='3-3';
+ liveFormation=select.value;renderLiveCourt();
+}
+document.addEventListener('click',e=>{
+ const layoutBtn=e.target.closest('[data-layout]');if(layoutBtn){const [team,layout]=layoutBtn.dataset.layout.split(':');lineupLayout[team]=layout;renderTeams();return}
+ const viewBtn=e.target.closest('[data-view]');
+ if(viewBtn){const [team,view]=viewBtn.dataset.view.split(':');lineupView[team]=view;renderTeams();return}
+ const liveView=e.target.closest('[data-live-view]');
+ if(liveView){liveCourtView=liveView.dataset.liveView;renderLiveCourt();return}
+ const lineupMarker=e.target.closest('[data-lineup-pos]');
+ if(lineupMarker){
+  const team=lineupMarker.dataset.lineupTeam,slot=lineupMarker.dataset.lineupPos;
+  if(!lastTeams?.[team])return;
+  if(!lineupSelected){lineupSelected={team,slot};renderTeams();return}
+  if(lineupSelected.team!==team){lineupSelected={team,slot};renderTeams();return}
+  if(lineupSelected.slot===slot){lineupSelected=null;renderTeams();return}
+  const t=lastTeams[team],a=lineupSelected.slot,b=slot,getField=pid=>t.starters.find(x=>x.pos.id===pid);
+  if(a.startsWith('BENCH')&&b.startsWith('BENCH')){const ai=+a.slice(5),bi=+b.slice(5);[t.bench[ai],t.bench[bi]]=[t.bench[bi],t.bench[ai]]}
+  else if(a.startsWith('BENCH')||b.startsWith('BENCH')){const bi=+(a.startsWith('BENCH')?a.slice(5):b.slice(5)),fieldPos=a.startsWith('BENCH')?b:a,row=getField(fieldPos);if(row&&t.bench[bi]){const displaced=row.player;row.player=t.bench[bi];row.value=pv(row.player,fieldPos);t.bench[bi]=displaced}}
+  else {const ra=getField(a),rb=getField(b);if(ra&&rb){[ra.player,rb.player]=[rb.player,ra.player];ra.value=pv(ra.player,a);rb.value=pv(rb.player,b)}}
+  lineupSelected=null;renderTeams();return;
+ }
+ const marker=e.target.closest('[data-live-pos]');
+ if(marker){
+  const team=document.getElementById('liveTeam').value,pos=marker.dataset.livePos;
+  if(!lastTeams)return;
+  if(!liveStates[team])liveStates[team]=Object.fromEntries(lastTeams[team].starters.map(x=>[x.pos.id,x.player]));
+  if(!liveBenchStates[team])liveBenchStates[team]=[...(lastTeams[team].bench||[])];
+  if(liveSelectedPos===null){liveSelectedPos=pos}
+  else if(liveSelectedPos===pos){liveSelectedPos=null}
+  else {liveHistory[team].push({field:{...liveStates[team]},bench:[...liveBenchStates[team]]});const a=liveSelectedPos,b=pos,bench=liveBenchStates[team];if(a.startsWith('BENCH')&&b.startsWith('BENCH')){const ai=+a.slice(5),bi=+b.slice(5);[bench[ai],bench[bi]]=[bench[bi],bench[ai]]}else if(a.startsWith('BENCH')||b.startsWith('BENCH')){const bi=+(a.startsWith('BENCH')?a.slice(5):b.slice(5)),fieldPos=a.startsWith('BENCH')?b:a,displaced=liveStates[team][fieldPos];liveStates[team][fieldPos]=bench[bi];bench[bi]=displaced}else{const temp=liveStates[team][b];liveStates[team][b]=liveStates[team][a];liveStates[team][a]=temp}liveSelectedPos=null}
+  renderLiveCourt();return;
+ }
+});
+let draggedLivePos=null;
+document.addEventListener('dragstart',e=>{const marker=e.target.closest('[data-live-pos]');if(!marker)return;draggedLivePos=marker.dataset.livePos;if(e.dataTransfer){e.dataTransfer.setData('text/plain',draggedLivePos);e.dataTransfer.effectAllowed='move';}});
+document.addEventListener('dragover',e=>{if(e.target.closest('[data-live-pos]'))e.preventDefault();});
+document.addEventListener('drop',e=>{
+ const target=e.target.closest('[data-live-pos]');if(!target)return;e.preventDefault();
+ const team=document.getElementById('liveTeam').value,from=draggedLivePos||e.dataTransfer?.getData('text/plain'),to=target.dataset.livePos;draggedLivePos=null;
+ if(!from||from===to||!lastTeams)return;
+ if(!liveStates[team])liveStates[team]=Object.fromEntries(lastTeams[team].starters.map(x=>[x.pos.id,x.player]));
+ if(!liveBenchStates[team])liveBenchStates[team]=[...(lastTeams[team].bench||[])];
+ liveHistory[team].push({field:{...liveStates[team]},bench:[...liveBenchStates[team]]});
+ const bench=liveBenchStates[team];
+ if(from.startsWith('BENCH')&&to.startsWith('BENCH')){const a=+from.slice(5),b=+to.slice(5);[bench[a],bench[b]]=[bench[b],bench[a]]}
+ else if(from.startsWith('BENCH')||to.startsWith('BENCH')){const bi=+(from.startsWith('BENCH')?from.slice(5):to.slice(5)),fieldPos=from.startsWith('BENCH')?to:from,displaced=liveStates[team][fieldPos];liveStates[team][fieldPos]=bench[bi];bench[bi]=displaced}
+ else {const tmp=liveStates[team][from];liveStates[team][from]=liveStates[team][to];liveStates[team][to]=tmp}
+ liveSelectedPos=null;renderLiveCourt();
+});
+document.getElementById('livePhase').onchange=setLiveFormationFromPhase;
+document.getElementById('liveFormation').onchange=()=>{liveFormation=document.getElementById('liveFormation').value;livePhase=['5-1','6-0','3-2-1','4-2'].includes(liveFormation)?'defense':'attack';document.getElementById('livePhase').value=livePhase;renderLiveCourt()};
+document.getElementById('undoLive').onclick=()=>{const team=document.getElementById('liveTeam').value,prev=liveHistory[team].pop();if(prev){if(prev.field){liveStates[team]=prev.field;liveBenchStates[team]=prev.bench}else liveStates[team]=prev;liveSelectedPos=null;renderLiveCourt()}else alert('Es gibt noch keinen Tausch zum Rückgängigmachen.')};
+document.getElementById('applyLiveCourt').onclick=()=>{
+ const team=document.getElementById('liveTeam').value;if(!lastTeams||!liveStates[team])return;
+ const order=['GK','LW','LB','CB','RB','RW','PV'];
+ const oldPlayers=lastTeams[team].starters.map(x=>x.player);
+ lastTeams[team].starters=order.map(pid=>({pos:POS.find(p=>p.id===pid),player:liveStates[team][pid],value:pv(liveStates[team][pid],pid)}));
+ lastTeams[team].score=lastTeams[team].starters.reduce((n,x)=>n+x.value,0)/7;
+ const now=new Set(lastTeams[team].starters.map(x=>x.player.id));
+ lastTeams[team].bench=[...(liveBenchStates[team]||[]),...oldPlayers.filter(p=>!now.has(p.id))].filter((p,i,a)=>a.findIndex(x=>x.id===p.id)===i).slice(0,2);
+ renderTeams();document.getElementById('liveResults').innerHTML='<div class="callout good">Die Live-Feldanordnung wurde in die Aufstellungsansicht übernommen. Deine Spielerinnen-Stammdaten bleiben unverändert.</div>';
+};
+function refreshLiveSelectors(){let team=document.getElementById('liveTeam').value,select=document.getElementById('outgoing'),incoming=document.getElementById('incoming');if(!lastTeams){select.innerHTML='<option value="">Erst Aufstellung berechnen</option>';incoming.innerHTML='<option value="">Erst Aufstellung berechnen</option>';document.getElementById('liveCourt').innerHTML='<div class="empty">Bitte zuerst eine Aufstellung berechnen.</div>';return}let t=lastTeams[team],starters=t.starters.map(x=>x.player),bench=t.bench;if(!liveStates[team])liveStates[team]=Object.fromEntries(t.starters.map(x=>[x.pos.id,x.player]));select.innerHTML=starters.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('');let candidates=[...bench,...data.players.filter(p=>p.available&&!starters.some(s=>s.id===p.id)&&!bench.some(b=>b.id===p.id))];incoming.innerHTML=candidates.map(p=>`<option value="${p.id}">${esc(p.name)}${bench.some(b=>b.id===p.id)?' · Bank':''}</option>`).join('');renderLiveCourt();document.getElementById('liveResults').innerHTML='<div class="empty">Wähle die Spielerinnen und tippe auf „Beste Umstellung vorschlagen“.</div>'}
+document.getElementById('liveTeam').onchange=()=>{liveSelectedPos=null;refreshLiveSelectors()};document.getElementById('resetLive').onclick=()=>{if(lastTeams){liveStates.A=Object.fromEntries(lastTeams.A.starters.map(x=>[x.pos.id,x.player]));liveStates.B=Object.fromEntries(lastTeams.B.starters.map(x=>[x.pos.id,x.player]));liveHistory={A:[],B:[]};liveSelectedPos=null}refreshLiveSelectors();document.getElementById('liveMode').value='injury';document.getElementById('incoming').disabled=false;document.getElementById('incoming').style.opacity='1'};
+function evaluateAssignment(players){let best=null;const used=new Set(),slots=[];function rec(i,score){if(i===POS.length){let ids=slots.map(x=>x.player.id),total=score+chemTotal(ids)*.18;if(!best||total>best.score)best={slots:slots.slice(),score:total};return}let pos=POS[i];for(let p of players){if(used.has(p.id))continue;used.add(p.id);let ch=slots.reduce((n,x)=>n+chemistry(p.id,x.player.id),0);slots.push({player:p,pos,value:skillScore(p,pos)});rec(i+1,score+skillScore(p,pos)+ch*.08);slots.pop();used.delete(p.id)}}rec(0,0);return best}
+function suggestLive(){if(!lastTeams){alert('Bitte zuerst Aufstellungen berechnen.');return}let teamKey=document.getElementById('liveTeam').value,t=lastTeams[teamKey],outId=document.getElementById('outgoing').value,inId=document.getElementById('incoming').value,mode=document.getElementById('liveMode').value;if(!outId){alert('Wähle die Spielerin, die ausgewechselt wird.');return}let outPlayer=byId(outId),inPlayer=byId(inId);if(!inPlayer||inPlayer.id===outId){alert('Wähle eine andere verfügbare Spielerin als Ersatz.');return}
+let current=t.starters.map(s=>s.player),pool=current.filter(p=>p.id!==outId).concat(inPlayer);if(pool.length<7){document.getElementById('liveResults').innerHTML=`<div class="callout bad">Es fehlt eine geeignete Ersatzspielerin. Wähle eine verfügbare Spielerin aus der Liste „Einwechselspielerin“.</div>`;return}
+let best=evaluateAssignment(pool),oldMap=new Map(t.starters.map(s=>[s.player.id,s.pos.id])),moves=best.slots.filter(s=>oldMap.has(s.player.id)&&oldMap.get(s.player.id)!==s.pos.id).map(s=>({name:s.player.name,from:POS.find(p=>p.id===oldMap.get(s.player.id)).name,to:s.pos.name}));let incomingLine=mode==='sub'?`Einwechseln: ${esc(inPlayer.name)}`:`Ausfall: ${esc(outPlayer.name)} · Diese Spielerin wird aus der Formation entfernt.`;
+let html=`<div class="card"><h3 style="margin-top:0">${mode==='injury'?'Verletzungs-Umstellung':'Live-Wechsel'}</h3><div class="callout ${mode==='injury'?'warn':'good'}">${incomingLine}</div><p class="muted">Empfohlene neue Positionsverteilung. Die Vorschläge ordnen die sieben Spielerinnen so zu, dass Positionspassung und Zusammenspiel möglichst gut bleiben.</p><div class="move-list">${best.slots.map(s=>`<div class="move"><span>${esc(s.pos.name)}</span><strong>${esc(s.player.name)}</strong></div>`).join('')}</div>${moves.length?`<h4>Positionsänderungen gegenüber vorher</h4><div class="move-list">${moves.map(m=>`<div class="move"><span>${esc(m.name)}</span><strong>${esc(m.from)} → ${esc(m.to)}</strong></div>`).join('')}</div>`:'<div class="callout good">Keine zusätzliche Positionsverschiebung nötig.</div>'}<div class="callout warn">Das ist ein Vorschlag, keine automatische Änderung der gespeicherten Aufstellung. Bestätige Änderungen selbst und achte bei Verletzungen zuerst auf die Gesundheit.</div><button id="applyLive" class="dark">Vorschlag in aktuelle Aufstellung übernehmen</button></div>`;
+document.getElementById('liveResults').innerHTML=html;document.getElementById('applyLive').onclick=()=>{let starters=best.slots.map(s=>({...s}));let newBench=[...t.bench].filter(p=>p.id!==inPlayer.id&&p.id!==outId);if(mode==='sub'){if(!newBench.some(p=>p.id===outId))newBench.unshift(outPlayer)}else{let possible=data.players.filter(p=>p.available&&!starters.some(s=>s.player.id===p.id)&&p.id!==outId&&!newBench.some(b=>b.id===p.id)).sort((a,b)=>overall(b)-overall(a));newBench=[...newBench,...possible].slice(0,2)}
+lastTeams[teamKey]={starters,bench:newBench.slice(0,2),score:best.score};renderTeams();refreshLiveSelectors();document.getElementById('liveResults').innerHTML='<div class="callout good">Vorschlag wurde in die aktuelle Sitzungs-Aufstellung übernommen. Die Kaderdaten wurden nicht verändert.</div>';};}
+document.getElementById('suggestMoves').onclick=suggestLive;
+document.getElementById('liveMode').onchange=()=>{document.getElementById('incoming').disabled=false;document.getElementById('incoming').style.opacity='1';let label=document.querySelector('label[for="incoming"]');if(label)label.textContent=document.getElementById('liveMode').value==='injury'?'Ersatz für verletzte Spielerin':'Einwechselspielerin'};
+document.getElementById('exportBtn').onclick=()=>{let blob=new Blob([JSON.stringify({app:'Vaeth Handball Coach',version:4,activeYear,projects,exportedAt:new Date().toISOString(),...data},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='vaeth-handball-coach-sicherung.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
+document.getElementById('printBtn').onclick=()=>{switchTab('lineups');window.print()};
+document.getElementById('importBtn').onclick=()=>document.getElementById('importFile').click();
+document.getElementById('importFile').onchange=async e=>{let f=e.target.files[0];if(!f)return;try{let d=JSON.parse(await f.text());if(!Array.isArray(d.players)||!Array.isArray(d.chemistry))throw Error('Ungültiges Sicherungsformat');if(!confirm('Aktuelle Daten durch die Sicherung ersetzen?'))return;data={players:d.players,chemistry:d.chemistry,media:Array.isArray(d.media)?d.media:[]};save();lastTeams=null;render();alert('Sicherung importiert.')}catch(err){alert('Import fehlgeschlagen: '+err.message)}e.target.value=''};
+document.getElementById('clearAll').onclick=()=>{if(!confirm('Alle Spielerinnen und Beziehungen löschen?'))return;data={players:[],chemistry:[],media:[]};lastTeams=null;save();render();document.getElementById('lineupResults').innerHTML='<div class="empty">Füge mindestens sieben verfügbare Spielerinnen hinzu.</div>'};
+document.getElementById('demo').onclick=()=>{if(data.players.length&&!confirm('Beispielkader zusätzlich zu den vorhandenen Spielerinnen laden?'))return;let names=['Mia','Lena','Emma','Sophie','Lea','Hannah','Maja','Lina','Clara','Nele','Amelie','Ella','Jana','Laura','Paula','Lotta','Marie','Ida'],pref=['GK','LW','LB','CB','RB','RW','PV','LB','CB','RW','GK','PV','LW','RB','CB','LB','RW','PV'];names.forEach((n,i)=>{if(data.players.some(p=>p.name===n+' Demo'))return;let positions={};POS.forEach((p,j)=>positions[p.id]=Math.max(1,4-Math.abs(j-POS.findIndex(x=>x.id===pref[i]))%3));positions[pref[i]]=5;data.players.push({id:id(),name:n+' Demo',available:true,skills:{attack:3+i%3,defense:2+(i+1)%4,passing:3+(i+2)%3,shooting:2+(i+3)%4,vision:3+i%3},positions})});if(data.players.length>1)data.chemistry.push({a:data.players[0].id,b:data.players[1].id,score:2});save();render();alert('Beispielkader geladen. Prüfe und ändere die Werte vor einer echten Aufstellung.')};
+
+function refreshYearSelect(){const sel=document.getElementById('yearSelect');if(!sel)return;sel.innerHTML=Object.keys(projects).sort((a,b)=>b.localeCompare(a,'de',{numeric:true})).map(y=>`<option value="${esc(y)}">${esc(y)}</option>`).join('');if(!projects[activeYear])projects[activeYear]=blankYear();sel.value=activeYear;document.getElementById('yearStatus').textContent=`Aktive Saison: ${activeYear} · ${data.players.length} Spielerinnen · ${data.media?.length||0} Medien`}
+function switchYear(y){if(!y||y===activeYear)return;save();activeYear=y;localStorage.setItem(ACTIVE_YEAR,y);data=load();lastTeams=null;document.getElementById('lineupResults').innerHTML='<div class="empty">Berechne die Aufstellung für diese Saison.</div>';document.getElementById('liveCourt').innerHTML='<div class="empty">Berechne zuerst eine Aufstellung.</div>';refreshYearSelect();render();renderMedia();refreshLiveSelectors()}
+document.getElementById('yearSelect').addEventListener('change',e=>switchYear(e.target.value));
+document.getElementById('newYearBtn').onclick=()=>{let y=prompt('Name für das neue Teamjahr / die Saison (z. B. 2027/28):','2027/28');if(!y)return;y=y.trim();if(!y)return;if(projects[y]){alert('Diese Saison gibt es bereits.');return}projects[y]=blankYear();save();switchYear(y);refreshYearSelect();switchTab('players')};
+function applyTheme(v){let mode=v||localStorage.getItem('vaethCoach.theme')||'light';let dark=mode==='dark'||(mode==='system'&&window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches);document.body.classList.toggle('dark',dark);let sel=document.getElementById('themeSelect');if(sel)sel.value=mode;localStorage.setItem('vaethCoach.theme',mode)}
+function playUiSound(){if(localStorage.getItem('vaethCoach.sound')==='off')return;try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;const ctx=new C(),o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.value=660;g.gain.value=.035;o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+.055);o.onended=()=>ctx.close()}catch(e){}}
+document.getElementById('themeSelect').addEventListener('change',e=>applyTheme(e.target.value));
+document.getElementById('soundToggle').value=localStorage.getItem('vaethCoach.sound')||'on';
+document.getElementById('soundToggle').addEventListener('change',e=>{localStorage.setItem('vaethCoach.sound',e.target.value);if(e.target.value==='on')playUiSound()});
+document.addEventListener('click',e=>{if(e.target.closest('button')&&!e.target.closest('#soundToggle'))playUiSound()});
+function renderMedia(){const sel=document.getElementById('mediaPlayer');if(!sel)return;const old=sel.value;sel.innerHTML='<option value="">Allgemeines Material</option>'+data.players.map(p=>`<option value="${esc(p.id)}">${esc(p.name)}</option>`).join('');if([...sel.options].some(o=>o.value===old))sel.value=old;const list=data.media||[];const gal=document.getElementById('mediaGallery');if(!list.length){gal.innerHTML='<div class="empty">Noch kein Bildmaterial gespeichert.</div>';refreshYearSelect();return}gal.innerHTML=list.slice().reverse().map(m=>`<article class="media-item">${m.type==='video'?`<video controls preload="metadata" src="${m.data}"></video>`:`<img loading="lazy" src="${m.data}" alt="${esc(m.caption||'Trainingsmaterial')}">`}<div class="media-meta"><strong>${esc(m.playerName||'Allgemeines Material')}</strong><br>${esc(m.caption||m.name||'Ohne Beschreibung')}<br>${esc(new Date(m.createdAt).toLocaleDateString('de-DE'))}</div><button class="danger small" data-delete-media="${esc(m.id)}">Löschen</button></article>`).join('');gal.querySelectorAll('[data-delete-media]').forEach(b=>b.onclick=()=>{if(!confirm('Dieses Medium löschen?'))return;data.media=data.media.filter(m=>m.id!==b.dataset.deleteMedia);save();renderMedia()});refreshYearSelect()}
+document.getElementById('saveMedia').onclick=async()=>{const files=[...(document.getElementById('mediaFiles').files||[])];if(!files.length){alert('Bitte zuerst ein Foto oder Video auswählen.');return}const playerId=document.getElementById('mediaPlayer').value,player=byId(playerId),caption=document.getElementById('mediaCaption').value.trim();let accepted=0;for(const f of files){if(!f.type.startsWith('image/')&&!f.type.startsWith('video/'))continue;if(f.size>(f.type.startsWith('video/')?8:5)*1024*1024){alert(`${f.name} ist zu groß. Maximal 8 MB pro Video und 5 MB pro Bild.`);continue}try{const dataUrl=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(f)});data.media=data.media||[];data.media.push({id:id(),name:f.name,type:f.type.startsWith('video/')?'video':'image',mime:f.type,data:dataUrl,playerId:playerId||'',playerName:player?.name||'Allgemeines Material',caption,createdAt:new Date().toISOString()});accepted++}catch(e){alert('Datei konnte nicht gelesen werden: '+f.name)}}if(accepted){save();document.getElementById('mediaFiles').value='';document.getElementById('mediaCaption').value='';renderMedia();switchTab('media');alert(`${accepted} Datei(en) gespeichert.`)}};
+document.getElementById('clearMediaFilter').onclick=()=>{document.getElementById('mediaPlayer').value='';renderMedia()};
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{if(t.dataset.tab==='media')renderMedia()}));
+
+
+function publicSnapshot(){
+ const wanted=document.getElementById('shareTeams')?.value||'both';
+ const teams=[];
+ if(lastTeams){
+  for(const key of ['A','B']){
+   if(wanted!=='both'&&wanted!==key)continue;
+   const src=lastTeams[key];if(!src)continue;
+   const live=liveStates[key];
+   let members=live?Object.entries(live).map(([pos,player])=>({pos,player})).filter(x=>x.player):(src.starters||[]).map(x=>({pos:x.pos.id,player:x.player}));
+   const order=['GK','LW','LB','CB','RB','RW','PV'];
+   teams.push({name:key==='A'?'A-Team':'B-Team',players:order.map(pos=>{const found=members.find(x=>x.pos===pos);if(!found)return null;const p=found.player;return {position:(POS.find(z=>z.id===pos)?.short||pos),name:p.name,icon:p.icon||'🤾‍♀️',photo:p.photo||''}}).filter(Boolean)});
+  }
+ }
+ if(!teams.length){alert('Bitte zuerst eine Aufstellung berechnen.');return null}
+ return {season:activeYear,created:new Date().toLocaleString('de-DE'),teams};
+}
+function makeShareHtml(snapshot){
+ const safe=JSON.stringify(snapshot).replace(/</g,'\\u003c').replace(/>/g,'\\u003e').replace(/&/g,'\\u0026');
+ return `<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Teamübersicht – Väth Handball Coach</title><style>body{margin:0;background:#f2f5f9;color:#172033;font:16px/1.5 -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif}.wrap{max-width:960px;margin:auto;padding:22px}.head{background:#101827;color:white;padding:20px;border-radius:18px}.head h1{margin:0;font-size:24px}.teams{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:18px}.team{background:white;border:1px solid #dce2ec;border-radius:16px;padding:16px}.people{display:grid;gap:9px}.person{display:flex;align-items:center;gap:12px;border:1px solid #e5eaf1;border-radius:12px;padding:10px}.avatar{width:46px;height:46px;border-radius:50%;background:#eaf2ff;display:grid;place-items:center;overflow:hidden;font-size:24px;flex-shrink:0}.avatar img{width:100%;height:100%;object-fit:cover;transform:scale(1.35);transform-origin:center center}.pos{font-size:12px;color:#3578e5;font-weight:800}.name{font-weight:750}.foot{margin-top:20px;color:#63718a;font-size:12px}@media(min-width:720px){.people{grid-template-columns:1fr 1fr}}</style>
+<style id="modern-ui-refresh">
+/* Väth Handball Coach — refined responsive visual system */
+:root{
+ --bg:#f4f6fa;--paper:#ffffff;--ink:#172235;--muted:#68768b;--line:#e1e7ef;
+ --navy:#111c2e;--navy2:#1d2b42;--lime:#c9f36a;--blue:#356fe0;--blue2:#eaf1ff;
+ --green:#16845b;--greenbg:#e6f7ef;--amber:#a45b05;--amberbg:#fff4dc;
+ --red:#b42318;--redbg:#fff0ee;--shadow:0 8px 28px rgba(20,35,60,.055);
+}
+html{scroll-behavior:smooth}
+body{letter-spacing:-.012em;-webkit-font-smoothing:antialiased}
+header{position:relative;padding-top:22px;padding-bottom:22px;background:radial-gradient(ellipse at 84% 0%,rgba(82,115,154,.35),transparent 36%),linear-gradient(115deg,#101827,#192a40 72%,#20344c)}
+.brandmark{border-radius:18px;box-shadow:0 8px 24px rgba(201,243,106,.18)}
+.brand h1{font-size:clamp(21px,2.4vw,27px);letter-spacing:-.9px}
+.header-actions{gap:9px}
+.header-actions button,.yearbar button{min-height:42px}
+.yearbar{padding-top:15px;gap:10px}
+.yearbar select{width:auto;min-width:150px}
+.yearbar .year-note{font-size:12px}
+main{padding-top:22px}
+.notice{border-radius:14px;padding:12px 15px;line-height:1.55}
+.tabs{gap:6px;padding:5px 0 17px;scrollbar-width:thin;scrollbar-color:#c8d1df transparent}
+.tab{border:1px solid transparent;border-radius:12px;padding:10px 14px;transition:background .18s ease,color .18s ease,border-color .18s ease}
+.tab:hover:not(.active){background:rgba(100,116,139,.09);color:var(--ink)}
+.tab.active{background:var(--navy);color:#fff;box-shadow:0 4px 12px rgba(17,28,46,.15)}
+.head{margin:8px 0 18px;align-items:center}
+.head h2{font-size:clamp(23px,2.7vw,29px);letter-spacing:-.8px;line-height:1.15}
+.head p{max-width:720px;line-height:1.55;font-size:13px}
+.card,.stat,.player-card,.media-item{border-radius:18px;box-shadow:var(--shadow);transition:box-shadow .18s ease,border-color .18s ease,transform .18s ease}
+.stat{padding:17px}
+.stat strong{font-size:27px;letter-spacing:-.8px}
+.stat span{line-height:1.4}
+.player-card{padding:15px}
+.player-card:hover,.media-item:hover{border-color:#cbd7e7;box-shadow:0 12px 30px rgba(20,35,60,.08)}
+.player-name{letter-spacing:-.25px}
+input,select{min-height:42px;border-color:#d3dce8;border-radius:12px;transition:border-color .15s ease,box-shadow .15s ease}
+input:focus,select:focus{border-color:#7da5f3;box-shadow:0 0 0 3px rgba(53,111,224,.12);outline:none}
+label{color:var(--muted);letter-spacing:.01em}
+button{border-radius:12px;min-height:42px;transition:transform .12s ease,filter .15s ease,box-shadow .15s ease}
+button:hover{filter:brightness(1.035)}
+button:active{transform:translateY(1px)}
+button:not(.secondary):not(.dark):not(.lime):not(.danger){box-shadow:0 4px 10px rgba(53,111,224,.13)}
+button.secondary{border:1px solid var(--line)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #91bbff;outline-offset:2px}
+.pill{letter-spacing:.01em}
+.meter{height:7px;background:#edf0f5}
+.rating-box{border-radius:14px;background:color-mix(in srgb,var(--paper) 92%,var(--bg))}
+.empty{border-radius:18px;padding:34px 18px;line-height:1.6}
+.modal{border-radius:22px;box-shadow:0 24px 80px rgba(0,0,0,.22)}
+.player-marker{box-shadow:0 5px 14px rgba(23,52,33,.16);transition:box-shadow .15s ease,outline .15s ease,transform .15s ease}
+.player-marker:hover{box-shadow:0 8px 18px rgba(23,52,33,.22)}
+.player-marker.selected{box-shadow:0 0 0 4px rgba(242,169,0,.18),0 5px 14px rgba(23,52,33,.16)}
+.field-legend{font-size:12px;line-height:1.5}
+.media-item{padding:12px}
+.media-item img,.media-item video{border-radius:12px}
+body.dark{--bg:#0c1421;--paper:#151f2e;--ink:#eef3fa;--muted:#a5b2c5;--line:#2b394d;--navy:#101a29;--blue2:#203452;--shadow:0 8px 28px rgba(0,0,0,.18)}
+body.dark .notice{background:#342b18;border-color:#5a4926;color:#f5d995}
+body.dark .tab:hover:not(.active){background:#202d40;color:#eef3fa}
+body.dark .tab.active{background:#d5f58a;color:#172235}
+body.dark .rating-box{background:#151f2e}
+body.dark .meter{background:#2a3545}
+body.dark .empty{background:#151f2e;border-color:#3a4a60}
+@media(min-width:900px){
+ main{padding-left:22px;padding-right:22px}
+ .roster{gap:14px}
+}
+@media(max-width:760px){
+ header{padding:17px 15px;gap:14px}
+ .brand{gap:10px}.brandmark{width:46px;height:46px;border-radius:15px}.brandmark svg{width:34px;height:34px}
+ .brand h1{font-size:21px}.brand p{font-size:10px;letter-spacing:.02em}
+ .header-actions{display:grid;grid-template-columns:1fr 1fr;width:100%}
+ .header-actions button{padding:10px 9px;font-size:12px;min-height:42px}
+ .yearbar{padding:12px 14px 0;display:grid;grid-template-columns:auto minmax(120px,1fr);gap:8px}
+ .yearbar label{align-self:center}.yearbar select{width:100%;max-width:none}
+ .yearbar #newYearBtn{grid-column:1 / -1;width:100%}
+ .yearbar .year-note{grid-column:1 / -1}
+ main{padding:16px 13px 34px}
+ .tabs{margin:0 -1px 2px;gap:6px;padding-bottom:13px}
+ .tab{padding:10px 12px;font-size:13px}
+ .head{align-items:stretch}
+ .head>button{width:100%}
+ .roster{grid-template-columns:1fr}
+ .stats{gap:7px}.stat{padding:10px 9px;border-radius:14px}.stat strong{font-size:22px}
+ .stat span{font-size:11px}
+ .field-grid,.rating-grid{grid-template-columns:1fr}
+ .card{padding:13px}
+ .lineup-controls{grid-template-columns:1fr!important}
+}
+@media(max-width:380px){
+ .brand p{display:none}
+ .stats{grid-template-columns:1fr 1fr}
+ .stats .stat:last-child{grid-column:1 / -1}
+ .header-actions{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){
+ *,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}
+}
+</style>
+
+</head><body><div class="wrap"><header class="head"><h1>Väth Handball Coach · Teamübersicht</h1><div id="meta"></div></header><div id="teams" class="teams"></div><div class="foot">Geteilte Spielerinnen-Ansicht · Enthält keine internen Bewertungen oder Teamchemie-Daten.</div></div><script>const d=${safe};document.getElementById('meta').textContent='Saison '+d.season+' · Stand: '+d.created;document.getElementById('teams').innerHTML=d.teams.map(t=>'<section class="team"><h2>'+t.name+'</h2><div class="people">'+t.players.map(p=>'<div class="person"><div class="avatar">'+(p.photo?'<img alt="" style="object-position:'+(p.photoX??50)+'% '+(p.photoY??50)+'%" src="'+p.photo+'">':p.icon)+'</div><div><div class="pos">'+p.position+'</div><div class="name">'+p.name.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))+'</div></div></div>').join('')+'</div></section>').join('');<\/script></body></html>`;
+}
+async function createShareView(){
+ const snap=publicSnapshot();if(!snap)return;
+ const blob=new Blob([makeShareHtml(snap)],{type:'text/html;charset=utf-8'});
+ const file=new File([blob],`Teamuebersicht-${snap.season.replace('/','-')}.html`,{type:'text/html'});
+ if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+  try{await navigator.share({title:'Teamübersicht · Väth Handball Coach',text:'Aktuelle Teamaufstellung',files:[file]});return}catch(e){if(e.name==='AbortError')return}
+ }
+ const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=file.name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);
+ alert('Die Spielerinnen-Ansicht wurde als HTML-Datei erstellt. Du kannst diese Datei per E-Mail, AirDrop oder Messenger teilen. Sie enthält nur Namen, Positionen und optionale Symbole/Fotos – keine internen Bewertungen.');
+}
+document.getElementById('shareViewBtn').onclick=createShareView;
+document.getElementById('shareViewSettingsBtn').onclick=createShareView;
+
+refreshYearSelect();applyTheme();renderMedia();render();
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(err => console.warn('Offline-Funktion konnte nicht aktiviert werden:', err));
+  });
+}
+})();
+</script>
+</body></html>
